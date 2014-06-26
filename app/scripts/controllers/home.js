@@ -30,7 +30,7 @@ define(
           $scope.passIt = function ()
           {
             console.log('coming in here ?');
-            
+
             $scope.$bus.publish(
               {
                 channel: 'orders',
