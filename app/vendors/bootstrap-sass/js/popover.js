@@ -1,8 +1,8 @@
 /* ========================================================================
- * Bootstrap: popover.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#popovers
+ * Bootstrap: popover.js v3.0.2
+ * http://getbootstrap.com/javascript/#popovers
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,9 @@
 
     $tip.removeClass('fade top bottom left right in')
 
-    $tip.find('.popover-title:empty').hide()
+    // IE8 doesn't accept hiding via the `:empty` pseudo selector, we have to do
+    // this manually by checking the contents.
+    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').hide()
   }
 
   Popover.prototype.hasContent = function () {
@@ -73,6 +75,10 @@
       || (typeof o.content == 'function' ?
             o.content.call($e[0]) :
             o.content)
+  }
+
+  Popover.prototype.arrow = function () {
+    return this.$arrow = this.$arrow || this.tip().find('.arrow')
   }
 
   Popover.prototype.tip = function () {
@@ -108,4 +114,4 @@
     return this
   }
 
-}(window.jQuery);
+}(jQuery);

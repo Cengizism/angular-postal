@@ -11,7 +11,8 @@
     "angular-cookies": "~1.0.7",
     "angular-sanitize": "~1.0.7",
     "requirejs": "~2.1.8",
-    "requirejs-domready": "~2.0.1"
+    "requirejs-domready": "~2.0.1",
+    "postal.js": "~0.10.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.7",

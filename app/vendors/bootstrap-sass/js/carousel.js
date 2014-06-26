@@ -1,8 +1,8 @@
 /* ========================================================================
- * Bootstrap: carousel.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#carousel
+ * Bootstrap: carousel.js v3.0.2
+ * http://getbootstrap.com/javascript/#carousel
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@
   Carousel.DEFAULTS = {
     interval: 5000
   , pause: 'hover'
+  , wrap: true
   }
 
   Carousel.prototype.cycle =  function (e) {
@@ -105,11 +106,14 @@
     var fallback  = type == 'next' ? 'first' : 'last'
     var that      = this
 
+    if (!$next.length) {
+      if (!this.options.wrap) return
+      $next = this.$element.find('.item')[fallback]()
+    }
+
     this.sliding = true
 
     isCycling && this.pause()
-
-    $next = $next.length ? $next : this.$element.find('.item')[fallback]()
 
     var e = $.Event('slide.bs.carousel', { relatedTarget: $next[0], direction: direction })
 
@@ -210,4 +214,4 @@
     })
   })
 
-}(window.jQuery);
+}(jQuery);
