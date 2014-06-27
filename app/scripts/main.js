@@ -40,6 +40,7 @@ require(
     'directives/appVersion',
     'filters/interpolate',
     'services/version',
+    'services/maestro',
     'services/user'
     // Any individual controller, service, directive or filter file
     // that you add will need to be pulled in here.
