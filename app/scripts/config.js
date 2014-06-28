@@ -2,7 +2,8 @@ define(
   {
     app: {
       version:  '@@version',
-      released: '@@released'
+      released: '@@released',
+      positions: ['Keeper', 'Defence', 'Midfield', 'Attack']
     }
   }
 );

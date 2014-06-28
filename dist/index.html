@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>
-<html class="no-js lt-ie9 lt-ie8 lt-ie7"></html>
-<![endif]-->
-<!--[if IE 7]>
-<html class="no-js lt-ie9 lt-ie8"></html>
-<![endif]-->
-<!--[if IE 8]>
-<html class="no-js lt-ie9"></html>
-<![endif]-->
+<!--if lt IE 7html.no-js.lt-ie9.lt-ie8.lt-ie7
+-->
+<!--if IE 7html.no-js.lt-ie9.lt-ie8
+-->
+<!--if IE 8html.no-js.lt-ie9
+-->
 <!-- [if gt IE 8] <!-->
 <html lang="en" class="no-js">
   <!-- <![endif]-->
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>WebPaige Foundation</title>
+    <title>ngEventBus</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icons/apple-touch-icon-144-precomposed.png">
@@ -22,37 +19,104 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icons/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="icons/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="icons/favicon.png">
-    <link rel="stylesheet" href="styles/c3b67b29.main.css">
+    <link rel="stylesheet" href="styles/890a4d86.main.css"/>
   </head>
   <body>
-    <!--[if lt IE 7]>
-    <p class="chromeframe">You are using an outdated browser.<a href="http://browsehappy.com/">Upgrade your browser today</a>or<a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a>to better experience this site.</p>
-    <![endif]-->
-    <!--[if lt IE 9]>
-    <script src="vendors/es5-shim/es5-shim.js"></script>
-    <script src="vendors/json3/lib/json3.min.js"></script>
-    <![endif]-->
+    <!--if lt IE 7
+    p.chromeframe
+     | You are using an outdated browser.
+     a(href='http://browsehappy.com/') Upgrade your browser today
+     | or
+     a(href='http://www.google.com/chromeframe/?redirect=true') install Google Chrome Frame
+     | to better experience this site.
+    -->
+    <!--if lt IE 9
+    script(src='vendors/es5-shim/es5-shim.js')
+    script(src='vendors/json3/lib/json3.min.js')
+    
+    -->
     <div id="wrap">
       <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
         <div class="container">
-          <button type="button" data-toggle="collapse" data-target=".bs-navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#/home" class="navbar-brand">Home</a>
-          <div class="nav-collapse collapse bs-navbar-collapse">
-            <ul class="nav navbar-nav">
-              <li><a href="#/partial1">Partial1</a></li>
-              <li><a href="#/partial2">Partial2</a></li>
-            </ul>
+          <button type="button" data-toggle="collapse" data-target=".bs-navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#/" class="navbar-brand">ngEventBus</a>
+          <!--.nav-collapse.collapse.bs-navbar-collapse-->
+          <!--	ul.nav.navbar-nav-->
+          <!--		li-->
+          <!--			a(href='#/partial1') Partial1-->
+          <!--		li-->
+          <!--			a(href='#/partial2') Partial2-->
+        </div>
+      </div>
+      <div class="container">
+        <div ng-controller="clubController" class="row">
+          <div class="col-lg-4">
+            <h3>Player</h3>
+            <hr>
+            <form role="form" ng-submit="savePlayer(player)">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" type="text" placeholder="Enter name" ng-model="player.name" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="position">Position</label>
+                <select ng-model="player.position" ng-options="position for position in positions" class="form-control">
+                  <option value="">Choose a position</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="goals">Goals</label>
+                <div class="row">
+                  <div class="col-xs-4">
+                    <input id="goals" type="number" placeholder="Goals" min="0" max="120" ng-model="player.goals" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-default">Save</button>
+              <button type="reset" ng-show="player.name" ng-click="clearForm()" class="btn btn-link">Clear form</button>
+            </form>
+          </div>
+          <div class="col-lg-8">
+            <h3>Team</h3>
+            <hr>
+            <p ng-hide="players.length &gt; 0">There are no players. Please add some.</p>
+            <table ng-show="players.length &gt; 0" class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Goals</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="player in players">
+                  <td>{{$index}}</td>
+                  <td>{{player.name}}</td>
+                  <td>{{player.position}}</td>
+                  <td>{{player.goals}}</td>
+                  <td>
+                    <div class="btn-group-sm">
+                      <button ng-click="editPlayer(player)" class="btn btn-default btn-sm">edit</button>
+                      <button ng-click="deletePlayer(player.id)" class="btn btn-default btn-sm">delete</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!--hr-->
+            <!--.panel-->
+            <!--	.panel-body {{players}}-->
           </div>
         </div>
       </div>
-      <div ng-view="" class="container"></div>
     </div>
     <footer>
       <div class="container">
         <p class="text-muted credit pull-left">Some footer text<a href="#"> and a link</a></p>
-        <p style="margin-top:20px" class="text-muted pull-right">{{ 'Current version is v%VERSION%. Released: %RELEASED%' | interpolate }}</p>
+        <p style="margin-top:20px" class="text-muted pull-right">{{ 'Current version is v%VERSION%. Released: %RELEASED%' }}</p>
       </div>
     </footer>
-    <!-- block analytics-->
-    <script data-main="scripts/55e6b8af.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/caea16c7.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

@@ -11,12 +11,13 @@ define(
   ],
   function (angular)
   {
-    return angular.module('MyApp',
+    return angular.module('ngEventBus',
       [
         'controllers',
         'services',
         'filters',
         'directives'
-      ]);
+      ]
+    );
   }
 );

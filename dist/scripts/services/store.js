@@ -1,0 +1,1 @@
+define(["services/services"],function(e){e.factory("Store",[function(){return{get:function(){return angular.fromJson(localStorage.getItem("players"))},set:function(e){return localStorage.setItem("players",angular.toJson(e))}}}])});

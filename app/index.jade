@@ -1,44 +1,111 @@
 extends layout
 
 block navbar
-  .navbar.navbar-inverse.navbar-fixed-top.bs-docs-nav
-    .container
-      button.navbar-toggle(type='button', data-toggle='collapse', data-target='.bs-navbar-collapse')
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.navbar-brand(href='#/home') Home
-      .nav-collapse.collapse.bs-navbar-collapse
-        ul.nav.navbar-nav
-          li
-            a(href='#/partial1') Partial1
-          li
-            a(href='#/partial2') Partial2
+	.navbar.navbar-inverse.navbar-fixed-top.bs-docs-nav
+		.container
+			button.navbar-toggle(type='button', data-toggle='collapse', data-target='.bs-navbar-collapse')
+				span.icon-bar
+				span.icon-bar
+				span.icon-bar
+			a.navbar-brand(href='#/') ngEventBus
+			//.nav-collapse.collapse.bs-navbar-collapse
+			//	ul.nav.navbar-nav
+			//		li
+			//			a(href='#/partial1') Partial1
+			//		li
+			//			a(href='#/partial2') Partial2
 
 block footer
-  footer
-    .container
-      p.text-muted.credit.pull-left
-        | Some footer text
-        a(href='#')  and a link
-      p.text-muted.pull-right(style='margin-top:20px')
-        | {{ 'Current version is v%VERSION%. Released: %RELEASED%' | interpolate }}
+	footer
+		.container
+			p.text-muted.credit.pull-left
+				| Some footer text
+				a(href='#')  and a link
+			p.text-muted.pull-right(style='margin-top:20px')
+				| {{ 'Current version is v%VERSION%. Released: %RELEASED%' }}
 
 block icons
-  link(rel='apple-touch-icon-precomposed', sizes='144x144', href='icons/apple-touch-icon-144-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='114x114', href='icons/apple-touch-icon-114-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='72x72', href='icons/apple-touch-icon-72-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', href='icons/apple-touch-icon-57-precomposed.png')
-  link(rel='shortcut icon', href='icons/favicon.png')
+	link(rel='apple-touch-icon-precomposed', sizes='144x144', href='icons/apple-touch-icon-144-precomposed.png')
+	link(rel='apple-touch-icon-precomposed', sizes='114x114', href='icons/apple-touch-icon-114-precomposed.png')
+	link(rel='apple-touch-icon-precomposed', sizes='72x72', href='icons/apple-touch-icon-72-precomposed.png')
+	link(rel='apple-touch-icon-precomposed', href='icons/apple-touch-icon-57-precomposed.png')
+	link(rel='shortcut icon', href='icons/favicon.png')
 
 block iestuff
-  //if lt IE 7
-    p.chromeframe
-      | You are using an outdated browser.
-      a(href='http://browsehappy.com/') Upgrade your browser today
-      | or
-      a(href='http://www.google.com/chromeframe/?redirect=true') install Google Chrome Frame
-      | to better experience this site.
-  //if lt IE 9
-    script(src='vendors/es5-shim/es5-shim.js')
-    script(src='vendors/json3/lib/json3.min.js')
+	//if lt IE 7
+		p.chromeframe
+			| You are using an outdated browser.
+			a(href='http://browsehappy.com/') Upgrade your browser today
+			| or
+			a(href='http://www.google.com/chromeframe/?redirect=true') install Google Chrome Frame
+			| to better experience this site.
+	//if lt IE 9
+		script(src='vendors/es5-shim/es5-shim.js')
+		script(src='vendors/json3/lib/json3.min.js')
+
+block app-content
+	.row(ng-controller='clubController')
+
+		.col-lg-4
+			h3 Player
+			hr
+
+			form(role='form',
+			ng-submit='savePlayer(player)')
+
+				.form-group
+					label(for='name') Name
+					input#name.form-control(type='text',
+					placeholder='Enter name',
+					ng-model='player.name')
+
+				.form-group
+					label(for='position') Position
+					select.form-control(ng-model='player.position',
+					ng-options='position for position in positions')
+						option(value='') Choose a position
+
+				.form-group
+					label(for='goals') Goals
+					.row
+						.col-xs-4
+							input#goals.form-control(type='number',
+							placeholder='Goals',
+							min='0',
+							max='120',
+							ng-model='player.goals')
+
+				button.btn.btn-default(type='submit') Save
+
+				button.btn.btn-link(type='reset',
+				ng-show='player.name',
+				ng-click='clearForm()') Clear form
+
+		.col-lg-8
+			h3 Team
+			hr
+
+			p(ng-hide='players.length > 0') There are no players. Please add some.
+
+			table.table.table-hover.table-bordered(ng-show='players.length > 0')
+				thead
+					tr
+						th #
+						th Name
+						th Position
+						th Goals
+						th Actions
+
+				tbody
+					tr(ng-repeat='player in players')
+						td {{$index}}
+						td {{player.name}}
+						td {{player.position}}
+						td {{player.goals}}
+						td
+							.btn-group-sm
+								button.btn.btn-default.btn-sm(ng-click='editPlayer(player)') edit
+								button.btn.btn-default.btn-sm(ng-click='deletePlayer(player.id)') delete
+			//hr
+			//.panel
+			//	.panel-body {{players}}

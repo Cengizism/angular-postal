@@ -1,1 +1,0 @@
-define(["services/services"],function(e){e.factory("User",[function(){return{get:function(){return"Test User"}}}])});

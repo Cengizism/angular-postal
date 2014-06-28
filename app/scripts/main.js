@@ -34,51 +34,22 @@ require(
     'postal',
     'run',
     'config',
-    'controllers/home',
-    'controllers/partial1',
-    'controllers/partial2',
-    'directives/appVersion',
-    'filters/interpolate',
-    'services/version',
-    'services/maestro',
-    'services/user'
-    // Any individual controller, service, directive or filter file
-    // that you add will need to be pulled in here.
+    'controllers/club_controller',
+    //'directives/appVersion',
+    //'filters/interpolate',
+    //'services/version',
+    'services/event_bus',
+    'services/store'
   ],
   function (angular, app, domReady, postal)
   {
     'use strict';
 
-    // $('html').removeAttr('ng-app');
-
     app.config(
       [
-        '$routeProvider', '$provide',
-        function ($routeProvider, $provide)
+        '$provide',
+        function ($provide)
         {
-          $routeProvider
-            .when(
-            '/home',
-            {
-              templateUrl: 'views/home.html',
-              controller: 'home'
-            })
-            .when(
-            '/partial1',
-            {
-              templateUrl: 'views/partial1.html',
-              controller: 'partial1'
-            })
-            .when(
-            '/partial2',
-            {
-              templateUrl: 'views/partial2.html',
-              controller: 'partial2'
-            })
-            .otherwise(
-            {
-              redirectTo: '/home'
-            });
 
 
           $provide.decorator(
@@ -123,9 +94,7 @@ require(
       ]
     );
 
-    domReady(
-      function () { angular.bootstrap(document, ['MyApp']) }
-    );
+    domReady(function () { angular.bootstrap(document, ['ngEventBus']) });
 
   }
 );

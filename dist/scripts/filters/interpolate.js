@@ -1,1 +1,0 @@
-define(["filters/filters","config"],function(e,t){e.filter("interpolate",[function(){return function(e){return e=String(e).replace(/\%RELEASED\%/mg,t.app.released),String(e).replace(/\%VERSION\%/mg,t.app.version)}}])});

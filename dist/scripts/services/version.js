@@ -1,1 +1,0 @@
-define(["services/services","config"],function(e,t){e.value("version",t.app.version)});
