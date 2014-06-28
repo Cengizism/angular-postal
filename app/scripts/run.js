@@ -9,7 +9,7 @@ define(
         '$rootScope', 'eventBus',
         function($rootScope, eventBus)
         {
-          // eventBus.subscribe();
+          eventBus.subscribe();
         }
       ]
     );
