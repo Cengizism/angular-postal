@@ -14,20 +14,15 @@ define(
           $scope.player = {};
           $scope.players = [];
 
-          $scope.getPlayerList = function ()
-          {
-            $scope.$bus.publish(
-              {
-                channel: 'players',
-                topic: 'player.list',
-                data: {
-                  callback: function (list) { $scope.players = list }
-                }
+          $scope.$bus.publish(
+            {
+              channel: 'players',
+              topic: 'player.list',
+              data: {
+                callback: function (list) { $scope.players = list }
               }
-            );
-          };
-
-          $scope.getPlayerList();
+            }
+          );
 
           $scope.savePlayer = function (player)
           {
@@ -45,8 +40,6 @@ define(
             $scope.player = {};
           };
 
-          $scope.editPlayer = function (player) { $scope.player = player };
-
           $scope.deletePlayer = function (id)
           {
             $scope.$bus.publish(
@@ -60,6 +53,8 @@ define(
               }
             );
           };
+
+          $scope.editPlayer = function (player) { $scope.player = player };
 
           $scope.clearForm = function () { $scope.player = {} };
         }

@@ -1,15 +1,23 @@
 define(
-  ['app'],
-  function (app)
+  ['app', 'postal'],
+  function (app, postal)
   {
     'use strict';
 
     app.run(
       [
-        '$rootScope', 'eventBus',
-        function($rootScope, eventBus)
+        '$rootScope', 'Players',
+        function($rootScope, Players)
         {
-          eventBus.subscribe();
+          Players.subscribe();
+
+          $rootScope.logs = [];
+
+          new postal.diagnostics.DiagnosticsWireTap(
+            {
+              writer: function (message) { $rootScope.logs.push(message) }
+            }
+          );
         }
       ]
     );

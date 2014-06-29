@@ -1,0 +1,42 @@
+{
+  "name": "postal.diagnostics.js",
+  "version": "0.7.3",
+  "main": [
+    "lib/postal.diagnostics.js",
+    "lib/postal.diagnostics.min.js"
+  ],
+  "dependencies": {
+    "lodash": "~2.4.1"
+  },
+  "keywords": [
+    "pub/sub",
+    "pub",
+    "sub",
+    "messaging",
+    "message",
+    "bus",
+    "event",
+    "wiretap",
+    "postal",
+    "diagnostics",
+    "logging"
+  ],
+  "devDependencies": {
+    "jquery": "~1.10.2",
+    "bootstrap": "~3.0.3",
+    "expect": "0.1.2",
+    "mocha": "~1.17.0",
+    "postal.js": ">=0.8.0"
+  },
+  "homepage": "https://github.com/postaljs/postal.diagnostics",
+  "_release": "0.7.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.7.3",
+    "commit": "01256490413eba37cfe848f65504dae2d3f47b2c"
+  },
+  "_source": "git://github.com/postaljs/postal.diagnostics.git",
+  "_target": "~0.7.3",
+  "_originalSource": "postal.diagnostics",
+  "_direct": true
+}

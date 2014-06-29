@@ -4,10 +4,10 @@ define(
   {
     'use strict';
 
-    // TODO: Turn it to an initable instance with any given channel and subscribe methods
+    // TODO: Turn it to an initiatable instance with any given channel and subscribe methods
 
     services.factory(
-      'eventBus',
+      'Players',
       [
         '$rootScope', 'Store',
         function ($rootScope, Store)

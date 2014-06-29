@@ -9,9 +9,10 @@ require.config(
       angular: '../vendors/angular/angular',
       jquery: '../vendors/jquery/jquery.min',
       domReady: '../vendors/requirejs-domready/domReady',
-      postal: '../vendors/postal.js/lib/postal.min',
       lodash: '../vendors/lodash/dist/lodash.min',
-      conduitjs: '../vendors/conduitjs/lib/conduit.min'
+      conduitjs: '../vendors/conduitjs/lib/conduit.min',
+      postal: '../vendors/postal.js/lib/postal.min',
+      'postal-diagnostics': '../vendors/postal.diagnostics/lib/postal.diagnostics.min'
     },
     shim: {
       angular: {
@@ -21,6 +22,9 @@ require.config(
       postal: {
         deps: ['lodash', 'conduitjs'],
         exports: 'postal'
+      },
+      'postal-diagnostics': {
+        deps: ['postal']
       }
     }
   }
@@ -32,13 +36,14 @@ require(
     'app',
     'domReady',
     'postal',
+    'postal-diagnostics',
     'run',
     'config',
     'controllers/club_controller',
     //'directives/appVersion',
     //'filters/interpolate',
     //'services/version',
-    'services/event_bus',
+    'services/players',
     'services/store'
   ],
   function (angular, app, domReady, postal)
@@ -50,8 +55,6 @@ require(
         '$provide',
         function ($provide)
         {
-
-
           $provide.decorator(
             '$rootScope',
             [
@@ -88,7 +91,6 @@ require(
               }
             ]
           );
-
 
         }
       ]
