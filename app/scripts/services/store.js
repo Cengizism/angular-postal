@@ -11,7 +11,11 @@ define(
           return {
             get: function ()
             {
-              return angular.fromJson(localStorage.getItem('players'));
+              var players = localStorage.getItem('players');
+
+              if (!players) { this.set([]) }
+
+              return angular.fromJson(players);
             },
             set: function (data)
             {
