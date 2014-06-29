@@ -1,1 +1,1 @@
-define(["services/services"],function(e){e.factory("Store",[function(){return{get:function(){return angular.fromJson(localStorage.getItem("players"))},set:function(e){return localStorage.setItem("players",angular.toJson(e))}}}])});
+define(["services/services"],function(e){e.factory("Store",[function(){return{get:function(){var e=localStorage.getItem("players");return e||this.set([]),angular.fromJson(e)},set:function(e){return localStorage.setItem("players",angular.toJson(e))}}}])});
