@@ -1,0 +1,1 @@
+define(["angular","controllers/controllers","services/services","filters/filters","directives/directives"],function(e){return e.module("ngPostal",["controllers","services","filters","directives"])});

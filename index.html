@@ -1,79 +1,107 @@
 <!DOCTYPE html>
-<html>
-
+<!--if lt IE 7html.no-js.lt-ie9.lt-ie8.lt-ie7
+-->
+<!--if IE 7html.no-js.lt-ie9.lt-ie8
+-->
+<!--if IE 8html.no-js.lt-ie9
+-->
+<!-- [if gt IE 8] <!-->
+<html lang="en" class="no-js">
+  <!-- <![endif]-->
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Angular-postal : Event bus for AngularJS. PostalJS based implementation." />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Angular-postal</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>ngPostal</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="styles/3684a881.main.css"/>
   </head>
-
   <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/Cengizism/angular-postal">View on GitHub</a>
-
-          <h1 id="project_title">Angular-postal</h1>
-          <h2 id="project_tagline">Event bus for AngularJS. PostalJS based implementation.</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/Cengizism/angular-postal/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/Cengizism/angular-postal/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+    <div id="wrap">
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <button type="button" data-toggle="collapse" data-target=".bs-navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#/" class="navbar-brand">ngPostal</a>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div ng-controller="club" class="row-fluid">
+          <div class="col-md-2">
+            <h3>Player</h3>
+            <hr>
+            <form role="form" ng-submit="savePlayer(player)">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" type="text" placeholder="Enter name" ng-model="player.name" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="position">Position</label>
+                <select ng-model="player.position" ng-options="position for position in positions" class="form-control">
+                  <option value="">Choose a position</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="goals">Goals</label>
+                <div class="row">
+                  <div class="col-xs-6">
+                    <input id="goals" type="number" placeholder="Goals" min="0" max="120" ng-model="player.goals" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-default">Save</button>
+              <button type="reset" ng-show="player.name" ng-click="clearForm()" class="btn btn-link">Clear form</button>
+            </form>
+          </div>
+          <div class="col-md-6">
+            <h3>Team</h3>
+            <hr>
+            <div class="panel">
+              <div ng-hide="players.length &gt; 0" class="panel-body">
+                <p>There are no players. Please add some.</p>
+              </div>
+              <div ng-show="players.length &gt; 0" class="panel-body">
+                <table class="table table-hover ng-cloak">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Position</th>
+                      <th>Goals</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="player in players">
+                      <td>{{player.id}}</td>
+                      <td>{{player.name}}</td>
+                      <td>{{player.position}}</td>
+                      <td>{{player.goals}}</td>
+                      <td>
+                        <div class="btn-group-sm">
+                          <button ng-click="editPlayer(player)" class="btn btn-default btn-sm">edit</button>
+                          <button ng-click="deletePlayer(player.id)" class="btn btn-default btn-sm">delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div><span><small>{{promised}}</small></span>
+          </div>
+          <div class="col-md-4">
+            <h3>Events</h3>
+            <hr>
+            <div class="list-group"><a href="#" ng-repeat="log in logs" ng-click="log.fold=!log.fold" class="list-group-item"><span ng-show="log.fold" class="glyphicon glyphicon-chevron-up pull-right"></span><span ng-hide="log.fold" class="glyphicon glyphicon-chevron-down pull-right"></span>
+                <h4 class="list-group-item-heading"><span class="label label-warning">{{log.channel}}</span>&nbsp;{{log.topic}}</h4>
+                <p class="list-group-item-text">{{log.timeStamp | date:'MM-dd-yyyy H:mm:ss'}}</p>
+                <div ng-show="log.fold">
+                  <hr>
+                  <dl class="dl-horizontal"><span ng-repeat="(key, value) in log.data">
+                      <dt>{{key}}</dt>
+                      <dd>{{value | json}}</dd></span></dl>
+                </div></a></div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Angular-postal maintained by <a href="https://github.com/Cengizism">Cengizism</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
+    <script data-main="scripts/e11ecb5f.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

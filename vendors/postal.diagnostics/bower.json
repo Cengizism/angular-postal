@@ -1,0 +1,31 @@
+{
+    "name": "postal.diagnostics.js",
+    "version": "0.7.3",
+    "main": [
+        "lib/postal.diagnostics.js",
+        "lib/postal.diagnostics.min.js"
+    ],
+    "dependencies": {
+        "lodash": "~2.4.1"
+    },
+    "keywords": [
+        "pub/sub",
+        "pub",
+        "sub",
+        "messaging",
+        "message",
+        "bus",
+        "event",
+        "wiretap",
+        "postal",
+        "diagnostics",
+        "logging"
+    ],
+    "devDependencies": {
+        "jquery": "~1.10.2",
+        "bootstrap": "~3.0.3",
+        "expect": "0.1.2",
+        "mocha": "~1.17.0",
+        "postal.js": ">=0.8.0"
+    }
+}
