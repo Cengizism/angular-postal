@@ -1,1 +1,2 @@
-Event bus for AngularJS. PostalJS based implementation.
+Event bus for AngularJS based on PostalJS.
+v0.1.0
