@@ -123,7 +123,6 @@ module.exports = function (grunt)
               '.tmp',
               '<%= paths.dist %>/*',
               '!<%= paths.dist %>/vendors*',
-              '!<%= paths.dist %>/WEB-INF*',
               '!<%= paths.dist %>/.git*'
             ]
           }]
