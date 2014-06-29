@@ -1,1 +1,1 @@
-define({app:{version:"1.1.0",released:"Sunday, June 29th, 2014, 9:29:28 PM",positions:["Keeper","Defence","Midfield","Attack"]}});
+define({app:{version:"1.1.0",released:"Sunday, June 29th, 2014, 9:39:13 PM",positions:["Keeper","Defence","Midfield","Attack"]}});
