@@ -18,8 +18,13 @@ html.no-js(lang='en')
 		// endbuild
 	body
 		#wrap
-			block navbar
-			.container
+			.navbar.navbar-inverse.navbar-fixed-top
+				.container-fluid
+					button.navbar-toggle(type='button', data-toggle='collapse', data-target='.bs-navbar-collapse')
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a.navbar-brand(href='#/') ngEventBus
+			.container-fluid
 				block app-content
-		block footer
 		script(data-main='scripts/main', src='vendors/requirejs/require.js')

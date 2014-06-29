@@ -6,16 +6,29 @@ define(
 
     app.run(
       [
-        '$rootScope', 'Players',
-        function($rootScope, Players)
+        '$rootScope', '$q',
+        function($rootScope, $q)
         {
-          Players.subscribe();
+          if (!angular.isDefined(postal.configuration.promise)) { postal.configuration.promise = {} }
+
+          postal.configuration.promise.createDeferred = function () { return $q.defer() };
+
+          postal.configuration.promise.getPromise = function (deferred) { return deferred.promise };
 
           $rootScope.logs = [];
 
           new postal.diagnostics.DiagnosticsWireTap(
             {
-              writer: function (message) { $rootScope.logs.push(message) }
+              name: 'console',
+              writer: function (message)
+              {
+                $rootScope.logs.unshift(
+                  angular.extend(
+                    angular.fromJson(message),
+                    { fold: false }
+                  )
+                );
+              }
             }
           );
         }

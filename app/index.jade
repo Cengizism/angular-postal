@@ -1,27 +1,10 @@
 extends layout
 
-block navbar
-	.navbar.navbar-inverse.navbar-fixed-top
-		.container
-			button.navbar-toggle(type='button', data-toggle='collapse', data-target='.bs-navbar-collapse')
-				span.icon-bar
-				span.icon-bar
-				span.icon-bar
-			a.navbar-brand(href='#/') ngEventBus
-
-block footer
-	footer
-		.container
-			.row
-				.col-md-12
-					ul
-						li(ng-repeat='log in logs') {{log}}
-
-
 block app-content
-	.row(ng-controller='clubController')
 
-		.col-lg-4
+	.row-fluid(ng-controller='club')
+
+		.col-md-2
 			h3 Player
 			hr
 
@@ -43,7 +26,7 @@ block app-content
 				.form-group
 					label(for='goals') Goals
 					.row
-						.col-xs-4
+						.col-xs-6
 							input#goals.form-control(type='number',
 							placeholder='Goals',
 							min='0',
@@ -56,7 +39,7 @@ block app-content
 				ng-show='player.name',
 				ng-click='clearForm()') Clear form
 
-		.col-lg-8
+		.col-md-6
 			h3 Team
 			hr
 
@@ -66,10 +49,10 @@ block app-content
 					p There are no players. Please add some.
 
 				.panel-body(ng-show='players.length > 0')
-					table.table.table-hover
+					table.table.table-hover.ng-cloak
 						thead
 							tr
-								th #
+								th ID
 								th Name
 								th Position
 								th Goals
@@ -85,10 +68,29 @@ block app-content
 									.btn-group-sm
 										button.btn.btn-default.btn-sm(ng-click='editPlayer(player)') edit
 										button.btn.btn-default.btn-sm(ng-click='deletePlayer(player.id)') delete
-			//hr
-			//.panel
-			//	.panel-body {{players}}
-			//
-			//hr
-			//.panel
-			//	.panel-body {{players}}
+
+			span: small {{promised}}
+
+
+		.col-md-4
+			h3 Events
+			hr
+
+			.list-group
+				a.list-group-item(href='#', ng-repeat='log in logs', ng-click='log.fold=!log.fold')
+
+					span.glyphicon.glyphicon-chevron-up.pull-right(ng-show='log.fold')
+					span.glyphicon.glyphicon-chevron-down.pull-right(ng-hide='log.fold')
+
+					h4.list-group-item-heading
+						span.label.label-warning {{log.channel}}
+						| &nbsp;{{log.topic}}
+
+					p.list-group-item-text {{log.timeStamp | date:'MM-dd-yyyy H:mm:ss'}}
+
+					div(ng-show='log.fold')
+						hr
+						dl.dl-horizontal
+							span(ng-repeat='(key, value) in log.data')
+								dt {{key}}
+								dd {{value | json}}

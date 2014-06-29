@@ -6,26 +6,24 @@ if (window.location.port == '8080')
 require.config(
   {
     paths: {
-      angular: '../vendors/angular/angular',
+      angular: '../vendors/angular/angular.min',
       jquery: '../vendors/jquery/jquery.min',
+      bootstrap: '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       domReady: '../vendors/requirejs-domready/domReady',
+      underscore: '../vendors/underscore/underscore',
       lodash: '../vendors/lodash/dist/lodash.min',
       conduitjs: '../vendors/conduitjs/lib/conduit.min',
       postal: '../vendors/postal.js/lib/postal.min',
-      'postal-diagnostics': '../vendors/postal.diagnostics/lib/postal.diagnostics.min'
+      'postal-diagnostics': '../vendors/postal.diagnostics/lib/postal.diagnostics.min',
+      'postal-request-response': '../vendors/postal.request-response/lib/postal.request-response.min'
     },
     shim: {
-      angular: {
-        deps: ['jquery'],
-        exports: 'angular'
-      },
-      postal: {
-        deps: ['lodash', 'conduitjs'],
-        exports: 'postal'
-      },
-      'postal-diagnostics': {
-        deps: ['postal']
-      }
+      angular: { deps: ['jquery'], exports: 'angular' },
+      bootstrap: { deps: ['jquery'], exports: 'bootstrap' },
+      lodash: { deps: ['underscore'], exports: 'lodash' },
+      postal: { deps: ['lodash', 'conduitjs'], exports: 'postal' },
+      'postal-diagnostics': { deps: ['postal'] },
+      'postal-request-response': { deps: ['postal'], exports: 'postal-request-response'}
     }
   }
 );
@@ -37,12 +35,11 @@ require(
     'domReady',
     'postal',
     'postal-diagnostics',
+    'postal-request-response',
+    'bootstrap',
     'run',
     'config',
-    'controllers/club_controller',
-    //'directives/appVersion',
-    //'filters/interpolate',
-    //'services/version',
+    'controllers/club',
     'services/players',
     'services/store'
   ],
@@ -67,20 +64,19 @@ require(
                   {
                     get: function ()
                     {
-                      var self = this;
-
                       return {
-                        subscribe: function ()
+                        subscribe: (function ()
                         {
                           var sub = postal.subscribe.apply(postal, arguments);
 
-                          self.$on(
+                          this.$on(
                             '$destroy',
                             function () { sub.unsubscribe() }
                           );
-                        },
+                        }).bind(this),
                         channel: postal.channel,
-                        publish: postal.publish
+                        publish: postal.publish,
+                        request: postal.request
                       };
                     },
                     enumerable: false
@@ -91,7 +87,6 @@ require(
               }
             ]
           );
-
         }
       ]
     );
