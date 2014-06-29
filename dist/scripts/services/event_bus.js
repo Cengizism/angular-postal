@@ -1,1 +1,0 @@
-define(["services/services"],function(e){e.factory("eventBus",["$rootScope","Store",function(e,t){e.$bus.subscribe({channel:"players",topic:"player.list",callback:function(){var e=t.get();return _.isUndefined(e)&&t.set([]),console.log("list ->",e||[]),e||[]}})}])});

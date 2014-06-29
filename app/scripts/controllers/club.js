@@ -59,7 +59,7 @@ define(
 
           $scope.clearForm = function () { $scope.player = {} };
 
-
+          // FOr testing promised pub/sub only for the moment
           $scope.promised = 'Loading promised..';
 
           players.request(

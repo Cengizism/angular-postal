@@ -11,7 +11,7 @@ define(
   ],
   function (angular)
   {
-    return angular.module('ngEventBus',
+    return angular.module('ngPostal',
       [
         'controllers',
         'services',

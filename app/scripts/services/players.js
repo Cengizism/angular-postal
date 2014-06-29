@@ -115,14 +115,17 @@ define(
               $timeout(
                 function ()
                 {
-                  envelope.reply({ time: result.time, userId: data.userId });
+                  envelope.reply(
+                    {
+                      time: result.time,
+                      userId: data.userId
+                    }
+                  );
                 },
                 4000
               );
             }
           );
-
-          console.log('version ->', _.VERSION);
 
         }
       ]

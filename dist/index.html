@@ -11,45 +11,20 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>ngEventBus</title>
-    <meta name="description" content="">
+    <title>ngPostal</title>
     <meta name="viewport" content="width=device-width">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icons/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icons/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icons/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="icons/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="icons/favicon.png">
-    <link rel="stylesheet" href="styles/890a4d86.main.css"/>
+    <link rel="stylesheet" href="styles/3684a881.main.css"/>
   </head>
   <body>
-    <!--if lt IE 7
-    p.chromeframe
-     | You are using an outdated browser.
-     a(href='http://browsehappy.com/') Upgrade your browser today
-     | or
-     a(href='http://www.google.com/chromeframe/?redirect=true') install Google Chrome Frame
-     | to better experience this site.
-    -->
-    <!--if lt IE 9
-    script(src='vendors/es5-shim/es5-shim.js')
-    script(src='vendors/json3/lib/json3.min.js')
-    
-    -->
     <div id="wrap">
-      <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
-        <div class="container">
-          <button type="button" data-toggle="collapse" data-target=".bs-navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#/" class="navbar-brand">ngEventBus</a>
-          <!--.nav-collapse.collapse.bs-navbar-collapse-->
-          <!--	ul.nav.navbar-nav-->
-          <!--		li-->
-          <!--			a(href='#/partial1') Partial1-->
-          <!--		li-->
-          <!--			a(href='#/partial2') Partial2-->
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <button type="button" data-toggle="collapse" data-target=".bs-navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#/" class="navbar-brand">ngPostal</a>
         </div>
       </div>
-      <div class="container">
-        <div ng-controller="clubController" class="row">
-          <div class="col-lg-4">
+      <div class="container-fluid">
+        <div ng-controller="club" class="row-fluid">
+          <div class="col-md-2">
             <h3>Player</h3>
             <hr>
             <form role="form" ng-submit="savePlayer(player)">
@@ -66,7 +41,7 @@
               <div class="form-group">
                 <label for="goals">Goals</label>
                 <div class="row">
-                  <div class="col-xs-4">
+                  <div class="col-xs-6">
                     <input id="goals" type="number" placeholder="Goals" min="0" max="120" ng-model="player.goals" class="form-control">
                   </div>
                 </div>
@@ -75,48 +50,58 @@
               <button type="reset" ng-show="player.name" ng-click="clearForm()" class="btn btn-link">Clear form</button>
             </form>
           </div>
-          <div class="col-lg-8">
+          <div class="col-md-6">
             <h3>Team</h3>
             <hr>
-            <p ng-hide="players.length &gt; 0">There are no players. Please add some.</p>
-            <table ng-show="players.length &gt; 0" class="table table-hover table-bordered">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Position</th>
-                  <th>Goals</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="player in players">
-                  <td>{{$index}}</td>
-                  <td>{{player.name}}</td>
-                  <td>{{player.position}}</td>
-                  <td>{{player.goals}}</td>
-                  <td>
-                    <div class="btn-group-sm">
-                      <button ng-click="editPlayer(player)" class="btn btn-default btn-sm">edit</button>
-                      <button ng-click="deletePlayer(player.id)" class="btn btn-default btn-sm">delete</button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <!--hr-->
-            <!--.panel-->
-            <!--	.panel-body {{players}}-->
+            <div class="panel">
+              <div ng-hide="players.length &gt; 0" class="panel-body">
+                <p>There are no players. Please add some.</p>
+              </div>
+              <div ng-show="players.length &gt; 0" class="panel-body">
+                <table class="table table-hover ng-cloak">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Position</th>
+                      <th>Goals</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="player in players">
+                      <td>{{player.id}}</td>
+                      <td>{{player.name}}</td>
+                      <td>{{player.position}}</td>
+                      <td>{{player.goals}}</td>
+                      <td>
+                        <div class="btn-group-sm">
+                          <button ng-click="editPlayer(player)" class="btn btn-default btn-sm">edit</button>
+                          <button ng-click="deletePlayer(player.id)" class="btn btn-default btn-sm">delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div><span><small>{{promised}}</small></span>
+          </div>
+          <div class="col-md-4">
+            <h3>Events</h3>
+            <hr>
+            <div class="list-group"><a href="#" ng-repeat="log in logs" ng-click="log.fold=!log.fold" class="list-group-item"><span ng-show="log.fold" class="glyphicon glyphicon-chevron-up pull-right"></span><span ng-hide="log.fold" class="glyphicon glyphicon-chevron-down pull-right"></span>
+                <h4 class="list-group-item-heading"><span class="label label-warning">{{log.channel}}</span>&nbsp;{{log.topic}}</h4>
+                <p class="list-group-item-text">{{log.timeStamp | date:'MM-dd-yyyy H:mm:ss'}}</p>
+                <div ng-show="log.fold">
+                  <hr>
+                  <dl class="dl-horizontal"><span ng-repeat="(key, value) in log.data">
+                      <dt>{{key}}</dt>
+                      <dd>{{value | json}}</dd></span></dl>
+                </div></a></div>
           </div>
         </div>
       </div>
     </div>
-    <footer>
-      <div class="container">
-        <p class="text-muted credit pull-left">Some footer text<a href="#"> and a link</a></p>
-        <p style="margin-top:20px" class="text-muted pull-right">{{ 'Current version is v%VERSION%. Released: %RELEASED%' }}</p>
-      </div>
-    </footer>
-    <script data-main="scripts/caea16c7.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/e11ecb5f.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

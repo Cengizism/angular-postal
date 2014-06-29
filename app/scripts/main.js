@@ -91,7 +91,6 @@ require(
       ]
     );
 
-    domReady(function () { angular.bootstrap(document, ['ngEventBus']) });
-
+    domReady(function () { angular.bootstrap(document, ['ngPostal']) });
   }
 );
