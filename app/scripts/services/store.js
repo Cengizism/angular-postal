@@ -13,9 +13,7 @@ define(
             {
               var players = localStorage.getItem('players');
 
-              if (!players) { this.set([]) }
-
-              return angular.fromJson(players);
+              return (players) ? angular.fromJson(players) : this.set([]);
             },
             set: function (data)
             {
