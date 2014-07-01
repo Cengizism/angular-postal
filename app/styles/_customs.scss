@@ -19,6 +19,12 @@ body {
 .list-group {
   font-size: .9em;
 
+  a:first-child {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top: none;
+  }
+
   h4 {
     font-size: 1.2em;
     margin-bottom: 10px;

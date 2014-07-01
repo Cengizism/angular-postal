@@ -1,7 +1,4 @@
-if (window.location.port == '8080')
-{
-  document.getElementsByTagName('html')[0].setAttribute('ng-app');
-}
+if (window.location.port == '8080') document.getElementsByTagName('html')[0].setAttribute('ng-app');
 
 require.config(
   {
@@ -10,6 +7,7 @@ require.config(
       jquery: '../vendors/jquery/jquery.min',
       bootstrap: '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       domReady: '../vendors/requirejs-domready/domReady',
+      // Load underscore because 'postal-request-response' complains about it in absence
       underscore: '../vendors/underscore/underscore',
       lodash: '../vendors/lodash/dist/lodash.min',
       conduitjs: '../vendors/conduitjs/lib/conduit.min',
@@ -19,11 +17,7 @@ require.config(
     },
     shim: {
       angular: { deps: ['jquery'], exports: 'angular' },
-      bootstrap: { deps: ['jquery'], exports: 'bootstrap' },
-      lodash: { deps: ['underscore'], exports: 'lodash' },
-      postal: { deps: ['lodash', 'conduitjs'], exports: 'postal' },
-      'postal-diagnostics': { deps: ['postal'] },
-      'postal-request-response': { deps: ['postal'], exports: 'postal-request-response'}
+      bootstrap: { deps: ['jquery'], exports: 'bootstrap' }
     }
   }
 );
@@ -41,9 +35,11 @@ require(
     'config',
     'controllers/club',
     'services/players',
-    'services/store'
+    'services/store',
+    'directives/logs',
+    'services/diagnostics'
   ],
-  function (angular, app, domReady, postal)
+  function (angular, app, domReady, postal, DiagnosticsWireTap)
   {
     'use strict';
 
@@ -58,6 +54,33 @@ require(
               '$delegate',
               function ($delegate)
               {
+                /**
+                 * Some configuration options
+                 * @type {string}
+                 */
+                postal.configuration.DEFAULT_CHANNEL = '/';
+                postal.configuration.SYSTEM_CHANNEL = 'postal';
+
+
+                /**
+                 * Channel definition instance
+                 * @type {_postal.ChannelDefinition}
+                 */
+//                var chn = new postal.ChannelDefinition();
+//                console.log('chn ->', chn);
+
+
+                /**
+                 * Add a wiretap
+                 */
+//                var tap = postal.addWireTap(
+//                  function (data, envelope) { console.log('wired: ', JSON.stringify(envelope)) }
+//                );
+                // Remove the tap
+                // tap();
+
+
+
                 Object.defineProperty(
                   $delegate.constructor.prototype,
                   '$bus',
@@ -76,7 +99,14 @@ require(
                         }).bind(this),
                         channel: postal.channel,
                         publish: postal.publish,
-                        request: postal.request
+                        subscriptions: postal.subscriptions,
+                        unsubscribe: postal.unsubscribe,
+                        linkChannels: postal.linkChannels,
+                        wiretaps: postal.wiretaps,
+                        // promised
+                        request: postal.request,
+                        // diagnostics
+                        diagnostics: DiagnosticsWireTap
                       };
                     },
                     enumerable: false

@@ -1,13 +1,13 @@
 define(
-  ['app', 'postal'],
+  ['app','postal'],
   function (app, postal)
   {
     'use strict';
 
     app.run(
       [
-        '$rootScope', '$q',
-        function($rootScope, $q)
+        '$rootScope', '$q', 'Diagnostics',
+        function($rootScope, $q, Diagnostics)
         {
           if (!angular.isDefined(postal.configuration.promise)) { postal.configuration.promise = {} }
 
@@ -15,22 +15,14 @@ define(
 
           postal.configuration.promise.getPromise = function (deferred) { return deferred.promise };
 
-          $rootScope.logs = [];
 
-          new postal.diagnostics.DiagnosticsWireTap(
+          Diagnostics.initialize(
             {
-              name: 'console',
-              writer: function (message)
-              {
-                $rootScope.logs.unshift(
-                  angular.extend(
-                    angular.fromJson(message),
-                    { fold: false }
-                  )
-                );
-              }
+              system: [{ channel: 'postal' }],
+              actions: [{ channel: 'players' }]
             }
           );
+
         }
       ]
     );

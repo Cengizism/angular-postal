@@ -70,27 +70,33 @@ block app-content
 										button.btn.btn-default.btn-sm(ng-click='deletePlayer(player.id)') delete
 
 			span: small {{promised}}
+			hr
+			button.btn.btn-mini.btn-default(ng-click='showSubscriptions()') Show subscriptions
+			button.btn.btn-mini.btn-default(ng-click='showWiretaps()') Show wiretaps
+			button.btn.btn-mini.btn-default(ng-click='unsubscribeSavers()') Unsubscribe Savers
 
 
 		.col-md-4
 			h3 Events
 			hr
+			//.btn-group(data-toggle='buttons')
+			//	label.btn.btn-default.active
+			//		input(type='checkbox', checked='', ng-model='logs.actions.self.active')
+			//		| Log actions
+			//	label.btn.btn-default.active
+			//		input(type='checkbox', checked='')
+			//		| Log system events
+			//br
+			//br
 
-			.list-group
-				a.list-group-item(href='#', ng-repeat='log in logs', ng-click='log.fold=!log.fold')
-
-					span.glyphicon.glyphicon-chevron-up.pull-right(ng-show='log.fold')
-					span.glyphicon.glyphicon-chevron-down.pull-right(ng-hide='log.fold')
-
-					h4.list-group-item-heading
-						span.label.label-warning {{log.channel}}
-						| &nbsp;{{log.topic}}
-
-					p.list-group-item-text {{log.timeStamp | date:'MM-dd-yyyy H:mm:ss'}}
-
-					div(ng-show='log.fold')
-						hr
-						dl.dl-horizontal
-							span(ng-repeat='(key, value) in log.data')
-								dt {{key}}
-								dd {{value | json}}
+			div
+				ul.nav.nav-tabs(role='tablist')
+					li.active
+						a(href='#actions', role='tab', data-toggle='tab') Actions ({{logs.actions.list.length}})
+					li
+						a(href='#system', role='tab', data-toggle='tab') System ({{logs.system.list.length}})
+				di.tab-content
+					div#actions.tab-pane.fade.active.in
+						logs(data='logs.actions.list')
+					div#system.tab-pane.fade
+						logs(data='logs.system.list')

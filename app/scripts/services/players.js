@@ -26,10 +26,10 @@ define(
             }
           );
 
-          players.subscribe(
+          var saved = players.subscribe(
             {
               topic: 'player.save',
-              callback: function (data)
+              callback: function (data, envelope)
               {
                 data.player.goals = (_.isUndefined(data.player.goals)) ? 0 : data.player.goals;
 
@@ -60,15 +60,49 @@ define(
 
                 Store.set(players);
 
-                data.callback(players);
+                // throw 'Some error value';
+
+                data.callback(players, envelope);
               }
             }
           );
 
           players.subscribe(
             {
+              topic: 'player.block.save',
+              callback: function ()
+              {
+                $rootScope.$bus.unsubscribe(saved);
+              }
+            }
+          );
+
+//          saved.before(
+//            function ()
+//            {
+//              console.log('before save action');
+//            }
+//          );
+
+          saved.after(
+            function ()
+            {
+              console.log('after save action ->', arguments[1]);
+            }
+          );
+
+          saved.catch(
+            function (err)
+            {
+              console.log('error here ->', err);
+            }
+          );
+
+
+          players.subscribe(
+            {
               topic: 'player.delete',
-              callback: function (data)
+              callback: function (data, envelope)
               {
                 Store.set(
                   _.filter(
@@ -77,7 +111,7 @@ define(
                   )
                 );
 
-                data.callback(Store.get());
+                data.callback(Store.get(), envelope);
               }
             }
           );
@@ -85,7 +119,7 @@ define(
           players.subscribe(
             {
               topic: '*.save',
-              callback: function () { console.log('player save action!') }
+              callback: function (data, envelope) { /*console.log('player save action!', envelope)*/ }
             }
           );
 
@@ -93,11 +127,16 @@ define(
             {
               channel: 'players',
               topic: '*.delete',
-              callback: function () { console.log('player delete action!') }
+              callback: function (data, envelope) { console.log('player delete action!', envelope) }
             }
           );
 
 
+          /**
+           * Promised stuff
+           * @param userId
+           * @returns {{userId: *, time: number}}
+           */
           function getLoginInfo (userId)
           {
             return {
@@ -118,12 +157,40 @@ define(
                   envelope.reply(
                     {
                       time: result.time,
-                      userId: data.userId
+                      userId: data.userId,
+                      envelope: envelope
                     }
                   );
                 },
                 4000
               );
+            }
+          );
+
+
+          /**
+           * Linking channels
+           */
+          var testing = $rootScope.$bus.channel('testing');
+
+          $rootScope.$bus.linkChannels(
+            {
+              channel: 'players',
+              topic: 'player.list'
+            },
+            {
+              channel: 'testing',
+              topic: 'tested.method'
+            }
+          );
+
+          testing.subscribe(
+            {
+              topic: 'tested.method',
+              callback: function (data, envelope)
+              {
+                // console.log('this is from etsting ->', data, envelope);
+              }
             }
           );
 

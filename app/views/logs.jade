@@ -1,0 +1,18 @@
+.list-group
+	a.list-group-item(href='#', ng-repeat='log in data', ng-click='log.fold=!log.fold')
+
+		span.glyphicon.glyphicon-chevron-up.pull-right(ng-show='log.fold')
+		span.glyphicon.glyphicon-chevron-down.pull-right(ng-hide='log.fold')
+
+		h4.list-group-item-heading
+			span.label.label-warning {{log.channel}}
+			| &nbsp;{{log.topic}}
+
+		p.list-group-item-text {{log.timeStamp | date:'MM-dd-yyyy H:mm:ss'}}
+
+		div(ng-show='log.fold')
+			hr
+			dl.dl-horizontal
+				span(ng-repeat='(key, value) in log.data')
+					dt {{key}}
+					dd {{value | json}}

@@ -16,6 +16,8 @@ define(
 
           var players = $scope.$bus.channel('players');
 
+//          console.log('wiretaps ->', $scope.$bus.wiretaps);
+
           players.publish(
             {
               topic: 'player.list',
@@ -78,6 +80,30 @@ define(
               $scope.promised = 'Uh oh! Error: ' + err;
             }
           );
+
+          // console.log('postal ->', $scope.$bus);
+
+          $scope.showSubscriptions = function ()
+          {
+            console.log('subscriptions ->', $scope.$bus.subscriptions);
+          };
+
+          $scope.showWiretaps = function ()
+          {
+            console.log('wiretaps ->', $scope.$bus.wiretaps);
+          };
+
+          $scope.unsubscribeSavers = function ()
+          {
+            players.publish(
+              {
+                topic: 'player.block.save',
+                data: {
+                  callback: function (result) { console.log('result ->', result) }
+                }
+              }
+            );
+          };
         }
       ]
     );
