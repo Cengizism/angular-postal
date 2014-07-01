@@ -15,14 +15,12 @@ define(
 
           postal.configuration.promise.getPromise = function (deferred) { return deferred.promise };
 
-
           Diagnostics.initialize(
             {
               system: [{ channel: 'postal' }],
               actions: [{ channel: 'players' }]
             }
           );
-
         }
       ]
     );

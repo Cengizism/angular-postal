@@ -9,7 +9,7 @@ body {
   height: auto !important;
   height: 100%;
   margin: 0 auto -300px;
-  padding: 0 0 60px;
+  padding: 0;
 }
 
 #wrap > .container-fluid {
@@ -29,5 +29,11 @@ body {
     font-size: 1.2em;
     margin-bottom: 10px;
     line-height: 1.4em;
+  }
+
+  dl {
+    dd {
+      margin-bottom: 5px;
+    }
   }
 }

@@ -12,7 +12,7 @@
 
 		div(ng-show='log.fold')
 			hr
-			dl.dl-horizontal
+			dl
 				span(ng-repeat='(key, value) in log.data')
 					dt {{key}}
 					dd {{value | json}}

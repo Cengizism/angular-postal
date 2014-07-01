@@ -4,65 +4,44 @@ define(
   {
     'use strict';
 
-    services.factory(
-      'Players',
+    services.service(
+      'Broker',
       [
-        '$rootScope', 'Store', '$timeout',
-        function ($rootScope, Store, $timeout)
+        '$rootScope', 'Player', '$timeout',
+        function ($rootScope, Player, $timeout)
         {
           var players = $rootScope.$bus.channel('players');
 
           players.subscribe(
             {
               topic: 'player.list',
-              callback: function (data, envelope)
-              {
-                var list = Store.get();
-
-                if (_.isUndefined(list)) Store.set([]);
-
-                data.callback(list || [], envelope);
-              }
+              callback: function (data, envelope) { data.callback(Player.list(), envelope) }
             }
           );
 
-          var saved = players.subscribe(
+          players.subscribe(
             {
               topic: 'player.save',
               callback: function (data, envelope)
               {
-                data.player.goals = (_.isUndefined(data.player.goals)) ? 0 : data.player.goals;
+                var result = Player.save(data);
 
-                var players = Store.get();
+                data.callback(result, envelope)
+              }
+            }
+          )
+            // .before(function () { console.log('before save action') })
+            .after(function () { console.log('after save action ->', arguments[1]) })
+            .catch(function (err) { console.log('error here ->', err) });
 
-                if (data.player.id)
-                {
-                  var index = _.indexOf(
-                    players, _.find(
-                      players,
-                      function (_player) { return _player.id == data.player.id }
-                    )
-                  );
+          players.subscribe(
+            {
+              topic: 'player.delete',
+              callback: function (data, envelope)
+              {
+                var result = Player.remove(data);
 
-                  players[index] = data.player;
-                }
-                else
-                {
-                  players.push(
-                    {
-                      id: Date.now(),
-                      name: data.player.name,
-                      position: data.player.position,
-                      goals: data.player.goals
-                    }
-                  );
-                }
-
-                Store.set(players);
-
-                // throw 'Some error value';
-
-                data.callback(players, envelope);
+                data.callback(result, envelope)
               }
             }
           );
@@ -73,45 +52,6 @@ define(
               callback: function ()
               {
                 $rootScope.$bus.unsubscribe(saved);
-              }
-            }
-          );
-
-//          saved.before(
-//            function ()
-//            {
-//              console.log('before save action');
-//            }
-//          );
-
-          saved.after(
-            function ()
-            {
-              console.log('after save action ->', arguments[1]);
-            }
-          );
-
-          saved.catch(
-            function (err)
-            {
-              console.log('error here ->', err);
-            }
-          );
-
-
-          players.subscribe(
-            {
-              topic: 'player.delete',
-              callback: function (data, envelope)
-              {
-                Store.set(
-                  _.filter(
-                    Store.get(),
-                    function (player) { return player.id != data.id }
-                  )
-                );
-
-                data.callback(Store.get(), envelope);
               }
             }
           );
@@ -130,6 +70,14 @@ define(
               callback: function (data, envelope) { console.log('player delete action!', envelope) }
             }
           );
+
+
+
+
+
+
+
+
 
 
           /**
@@ -166,6 +114,11 @@ define(
               );
             }
           );
+
+
+
+
+
 
 
           /**

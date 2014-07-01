@@ -2,83 +2,116 @@ extends layout
 
 block app-content
 
-	.row-fluid(ng-controller='club')
+	.row-fluid
+		.col-md-9
+			.row
 
-		.col-md-2
-			h3 Player
-			hr
 
-			form(role='form',
-			ng-submit='savePlayer(player)')
 
-				.form-group
-					label(for='name') Name
-					input#name.form-control(type='text',
-					placeholder='Enter name',
-					ng-model='player.name')
 
-				.form-group
-					label(for='position') Position
-					select.form-control(ng-model='player.position',
-					ng-options='position for position in positions')
-						option(value='') Choose a position
-
-				.form-group
-					label(for='goals') Goals
+				.col-md-12(ng-controller='teams')
+					h3 Teams
+					hr
 					.row
-						.col-xs-6
-							input#goals.form-control(type='number',
-							placeholder='Goals',
-							min='0',
-							max='120',
-							ng-model='player.goals')
-
-				button.btn.btn-default(type='submit') Save
-
-				button.btn.btn-link(type='reset',
-				ng-show='player.name',
-				ng-click='clearForm()') Clear form
-
-		.col-md-6
-			h3 Team
-			hr
-
-			.panel
-
-				.panel-body(ng-hide='players.length > 0')
-					p There are no players. Please add some.
-
-				.panel-body(ng-show='players.length > 0')
-					table.table.table-hover.ng-cloak
-						thead
-							tr
-								th ID
-								th Name
-								th Position
-								th Goals
-								th Actions
-
-						tbody
-							tr(ng-repeat='player in players')
-								td {{player.id}}
-								td {{player.name}}
-								td {{player.position}}
-								td {{player.goals}}
-								td
-									.btn-group-sm
-										button.btn.btn-default.btn-sm(ng-click='editPlayer(player)') edit
-										button.btn.btn-default.btn-sm(ng-click='deletePlayer(player.id)') delete
-
-			span: small {{promised}}
-			hr
-			button.btn.btn-mini.btn-default(ng-click='showSubscriptions()') Show subscriptions
-			button.btn.btn-mini.btn-default(ng-click='showWiretaps()') Show wiretaps
-			button.btn.btn-mini.btn-default(ng-click='unsubscribeSavers()') Unsubscribe Savers
+						.col-md-4
+							br
+							form(role='form', ng-submit='saveTeam(team)')
+								.form-group
+									label(for='name') Name
+									input#name.form-control(type='text', placeholder='Enter name', ng-model='team.name')
+								button.btn.btn-default(type='submit') Save
+								button.btn.btn-link(type='reset', ng-show='team.name', ng-click='clearForm()') Clear form
+						.col-md-8
+							br
+							.panel
+								.panel-body(ng-hide='teams.length > 0')
+									p There are no team. Please add some.
+								.panel-body(ng-show='teams.length > 0')
+									table.table.table-hover.ng-cloak
+										thead
+											tr
+												th ID
+												th Name
+										tbody
+											tr(ng-repeat='team in teams')
+												td {{player.id}}
+												td {{player.name}}
+												td
+													.btn-group-sm
+														button.btn.btn-default.btn-sm(ng-click='editTeam(team)') edit
+														button.btn.btn-default.btn-sm(ng-click='deleteTeam(team.id)') delete
 
 
-		.col-md-4
+
+
+
+				.col-md-12(ng-controller='players')
+					h3 Players
+					hr
+					.row
+						.col-md-4
+							br
+							form(role='form', ng-submit='savePlayer(player)')
+								.form-group
+									label(for='name') Name
+									input#name.form-control(type='text', placeholder='Enter name', ng-model='player.name')
+								.form-group
+									label(for='position') Position
+									select.form-control(ng-model='player.position', ng-options='position for position in positions')
+										option(value='') Choose a position
+								.form-group
+									label(for='goals') Goals
+									.row
+										.col-xs-6
+											input#goals.form-control(type='number', placeholder='Goals', min='0', max='120',ng-model='player.goals')
+								button.btn.btn-default(type='submit') Save
+								button.btn.btn-link(type='reset', ng-show='player.name', ng-click='clearForm()') Clear form
+						.col-md-8
+							br
+							.panel
+								.panel-body(ng-hide='players.length > 0')
+									p There are no players. Please add some.
+								.panel-body(ng-show='players.length > 0')
+									table.table.table-hover.ng-cloak
+										thead
+											tr
+												th ID
+												th Name
+												th Position
+												th Goals
+												th Actions
+
+										tbody
+											tr(ng-repeat='player in players')
+												td {{player.id}}
+												td {{player.name}}
+												td {{player.position}}
+												td {{player.goals}}
+												td
+													.btn-group-sm
+														button.btn.btn-default.btn-sm(ng-click='editPlayer(player)') edit
+														button.btn.btn-default.btn-sm(ng-click='deletePlayer(player.id)') delete
+
+
+
+
+
+				//.col-md-12
+				//	span: small {{promised}}
+				//	hr
+				//	button.btn.btn-mini.btn-default(ng-click='showSubscriptions()') Show subscriptions
+				//	button.btn.btn-mini.btn-default(ng-click='showWiretaps()') Show wiretaps
+				//	button.btn.btn-mini.btn-default(ng-click='unsubscribeSavers()') Unsubscribe Savers
+
+
+
+
+
+
+		.col-md-3
 			h3 Events
 			hr
+
 			//.btn-group(data-toggle='buttons')
 			//	label.btn.btn-default.active
 			//		input(type='checkbox', checked='', ng-model='logs.actions.self.active')
@@ -89,14 +122,17 @@ block app-content
 			//br
 			//br
 
-			div
-				ul.nav.nav-tabs(role='tablist')
-					li.active
-						a(href='#actions', role='tab', data-toggle='tab') Actions ({{logs.actions.list.length}})
-					li
-						a(href='#system', role='tab', data-toggle='tab') System ({{logs.system.list.length}})
-				di.tab-content
-					div#actions.tab-pane.fade.active.in
-						logs(data='logs.actions.list')
-					div#system.tab-pane.fade
-						logs(data='logs.system.list')
+			ul.nav.nav-tabs(role='tablist')
+				li.active
+					a(href='#actions', role='tab', data-toggle='tab')
+						| Actions &nbsp;
+						span.label.label-default {{logs.actions.list.length}}
+				li
+					a(href='#system', role='tab', data-toggle='tab')
+						| System &nbsp;
+						span.label.label-default {{logs.system.list.length}}
+			div.tab-content
+				div#actions.tab-pane.fade.active.in
+					logs(data='logs.actions.list')
+				div#system.tab-pane.fade
+					logs(data='logs.system.list')

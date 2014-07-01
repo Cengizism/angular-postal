@@ -5,10 +5,10 @@ define(
     'use strict';
 
     controllers.controller(
-      'club',
+      'players',
       [
-        '$scope', 'Players',
-        function ($scope, Players)
+        '$scope', 'Broker',
+        function ($scope, Broker)
         {
           $scope.positions = config.app.positions;
           $scope.player = {};
@@ -31,7 +31,6 @@ define(
           {
             players.publish(
               {
-                channel: 'players',
                 topic: 'player.save',
                 data: {
                   player: player,
@@ -47,7 +46,6 @@ define(
           {
             players.publish(
               {
-                channel: 'players',
                 topic: 'player.delete',
                 data: {
                   id: id,
@@ -61,49 +59,59 @@ define(
 
           $scope.clearForm = function () { $scope.player = {} };
 
-          // FOr testing promised pub/sub only for the moment
-          $scope.promised = 'Loading promised..';
 
-          players.request(
-            {
-              topic: "last.login",
-              data: { userId: 8675309 },
-              timeout: 5000
-            }
-          ).then(
-            function (data)
-            {
-              $scope.promised = 'Last login for userId: ' + data.userId + ' occurred on ' + data.time;
-            },
-            function (err)
-            {
-              $scope.promised = 'Uh oh! Error: ' + err;
-            }
-          );
 
-          // console.log('postal ->', $scope.$bus);
 
-          $scope.showSubscriptions = function ()
-          {
-            console.log('subscriptions ->', $scope.$bus.subscriptions);
-          };
 
-          $scope.showWiretaps = function ()
-          {
-            console.log('wiretaps ->', $scope.$bus.wiretaps);
-          };
 
-          $scope.unsubscribeSavers = function ()
-          {
-            players.publish(
-              {
-                topic: 'player.block.save',
-                data: {
-                  callback: function (result) { console.log('result ->', result) }
-                }
-              }
-            );
-          };
+//          // FOr testing promised pub/sub only for the moment
+//          $scope.promised = 'Loading promised..';
+//
+//          players.request(
+//            {
+//              topic: "last.login",
+//              data: { userId: 8675309 },
+//              timeout: 5000
+//            }
+//          ).then(
+//            function (data)
+//            {
+//              $scope.promised = 'Last login for userId: ' + data.userId + ' occurred on ' + data.time;
+//            },
+//            function (err)
+//            {
+//              $scope.promised = 'Uh oh! Error: ' + err;
+//            }
+//          );
+//
+//          // console.log('postal ->', $scope.$bus);
+//
+//          $scope.showSubscriptions = function ()
+//          {
+//            console.log('subscriptions ->', $scope.$bus.subscriptions);
+//          };
+//
+//          $scope.showWiretaps = function ()
+//          {
+//            console.log('wiretaps ->', $scope.$bus.wiretaps);
+//          };
+//
+//          $scope.unsubscribeSavers = function ()
+//          {
+//            players.publish(
+//              {
+//                topic: 'player.block.save',
+//                data: {
+//                  callback: function (result) { console.log('result ->', result) }
+//                }
+//              }
+//            );
+//          };
+
+
+
+
+
         }
       ]
     );
