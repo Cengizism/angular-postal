@@ -7,64 +7,28 @@ define(
     services.factory(
       'Player',
       [
-        '$rootScope', '_Store',
-        function ($rootScope, _Store)
+        '$rootScope', 'Store',
+        function ($rootScope, Store)
         {
           return {
-            list: function ()
+            list: function () { return _.toArray(Store('players').all()) },
+
+            save: function (player)
             {
-              var list = _Store.get();
+              var id = (player.id) ? player.id : Date.now();
 
-              if (_.isUndefined(list)) _Store.set([]);
-
-              console.log('data ->', list || []);
-
-              return list || [];
-            },
-            save: function (data)
-            {
-              console.log('data ->', data);
-
-              data.player.goals = (_.isUndefined(data.player.goals)) ? 0 : data.player.goals;
-
-              var players = _Store.get();
-
-              if (data.player.id)
-              {
-                var index = _.indexOf(
-                  players,
-                  _.find(players, function (_player) { return _player.id == data.player.id })
-                );
-
-                players[index] = data.player;
-              }
-              else
-              {
-                players.push(
-                  {
-                    id: Date.now(),
-                    name: data.player.name,
-                    position: data.player.position,
-                    goals: data.player.goals
-                  }
-                );
-              }
-
-              _Store.set(players);
-
-              return this.list();
-            },
-            remove: function (data)
-            {
-              _Store.set(
-                _.filter(
-                  _Store.get(),
-                  function (player) { return player.id != data.id }
-                )
+              Store('players').save(
+                id,
+                {
+                  id: id,
+                  name: (_.isUndefined(player.name)) ? '' : player.name,
+                  position: (_.isUndefined(player.position)) ? '' : player.position,
+                  goals: (_.isUndefined(player.goals)) ? 0 : player.goals
+                }
               );
+            },
 
-              return _Store.get()
-            }
+            remove: function (player) { Store('players').remove(player.id) }
           };
 
         }

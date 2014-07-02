@@ -75,7 +75,6 @@ block app-content
 									table.table.table-hover.ng-cloak
 										thead
 											tr
-												th ID
 												th Name
 												th Position
 												th Goals
@@ -83,14 +82,13 @@ block app-content
 
 										tbody
 											tr(ng-repeat='player in players')
-												td {{player.id}}
 												td {{player.name}}
 												td {{player.position}}
 												td {{player.goals}}
 												td
 													.btn-group-sm
 														button.btn.btn-default.btn-sm(ng-click='editPlayer(player)') edit
-														button.btn.btn-default.btn-sm(ng-click='deletePlayer(player.id)') delete
+														button.btn.btn-default.btn-sm(ng-click='removePlayer(player.id)') delete
 
 
 

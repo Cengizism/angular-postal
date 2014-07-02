@@ -7,25 +7,18 @@ define(
     controllers.controller(
       'players',
       [
-        '$scope', 'Broker',
-        function ($scope, Broker)
+        '$scope',
+        function ($scope)
         {
+          // console.log('wiretaps ->', $scope.$bus.wiretaps);
+
           $scope.positions = config.app.positions;
           $scope.player = {};
           $scope.players = [];
 
           var players = $scope.$bus.channel('players');
 
-//          console.log('wiretaps ->', $scope.$bus.wiretaps);
-
-          players.publish(
-            {
-              topic: 'player.list',
-              data: {
-                callback: function (list) { $scope.players = list }
-              }
-            }
-          );
+          players.publish('player.list', function (list) { $scope.players = list });
 
           $scope.savePlayer = function (player)
           {
@@ -34,7 +27,10 @@ define(
                 topic: 'player.save',
                 data: {
                   player: player,
-                  callback: function (list) { $scope.players = list }
+                  callback: function ()
+                  {
+                    players.publish('player.list', function (list) { $scope.players = list });
+                  }
                 }
               }
             );
@@ -42,14 +38,17 @@ define(
             $scope.player = {};
           };
 
-          $scope.deletePlayer = function (id)
+          $scope.removePlayer = function (id)
           {
             players.publish(
               {
-                topic: 'player.delete',
+                topic: 'player.remove',
                 data: {
                   id: id,
-                  callback: function (list) { $scope.players = list }
+                  callback: function ()
+                  {
+                    players.publish('player.list', function (list) { $scope.players = list });
+                  }
                 }
               }
             );
@@ -60,56 +59,49 @@ define(
           $scope.clearForm = function () { $scope.player = {} };
 
 
-
-
-
-
-//          // FOr testing promised pub/sub only for the moment
-//          $scope.promised = 'Loading promised..';
-//
-//          players.request(
-//            {
-//              topic: "last.login",
-//              data: { userId: 8675309 },
-//              timeout: 5000
-//            }
-//          ).then(
-//            function (data)
-//            {
-//              $scope.promised = 'Last login for userId: ' + data.userId + ' occurred on ' + data.time;
-//            },
-//            function (err)
-//            {
-//              $scope.promised = 'Uh oh! Error: ' + err;
-//            }
-//          );
-//
-//          // console.log('postal ->', $scope.$bus);
-//
-//          $scope.showSubscriptions = function ()
-//          {
-//            console.log('subscriptions ->', $scope.$bus.subscriptions);
-//          };
-//
-//          $scope.showWiretaps = function ()
-//          {
-//            console.log('wiretaps ->', $scope.$bus.wiretaps);
-//          };
-//
-//          $scope.unsubscribeSavers = function ()
-//          {
-//            players.publish(
-//              {
-//                topic: 'player.block.save',
-//                data: {
-//                  callback: function (result) { console.log('result ->', result) }
-//                }
-//              }
-//            );
-//          };
-
-
-
+          //          // FOr testing promised pub/sub only for the moment
+          //          $scope.promised = 'Loading promised..';
+          //
+          //          players.request(
+          //            {
+          //              topic: "last.login",
+          //              data: { userId: 8675309 },
+          //              timeout: 5000
+          //            }
+          //          ).then(
+          //            function (data)
+          //            {
+          //              $scope.promised = 'Last login for userId: ' + data.userId + ' occurred on ' + data.time;
+          //            },
+          //            function (err)
+          //            {
+          //              $scope.promised = 'Uh oh! Error: ' + err;
+          //            }
+          //          );
+          //
+          //          // console.log('postal ->', $scope.$bus);
+          //
+          //          $scope.showSubscriptions = function ()
+          //          {
+          //            console.log('subscriptions ->', $scope.$bus.subscriptions);
+          //          };
+          //
+          //          $scope.showWiretaps = function ()
+          //          {
+          //            console.log('wiretaps ->', $scope.$bus.wiretaps);
+          //          };
+          //
+          //          $scope.unsubscribeSavers = function ()
+          //          {
+          //            players.publish(
+          //              {
+          //                topic: 'player.block.save',
+          //                data: {
+          //                  callback: function (result) { console.log('result ->', result) }
+          //                }
+          //              }
+          //            );
+          //          };
 
 
         }

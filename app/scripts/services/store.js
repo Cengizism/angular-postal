@@ -1,14 +1,10 @@
 define(
-  ['services/services'],
-  function (services)
+  ['services/services'], function (services)
   {
     'use strict';
-
     services.factory(
-      'Store',
-      [
-        '$window', '$log', '$parse',
-        function ($window, $log, $parse)
+      'Store', [
+        '$window', '$log', '$parse', function ($window, $log, $parse)
         {
           return function (name, config)
           {
@@ -321,10 +317,10 @@ define(
                         if (value.hasOwnProperty("0"))
                         {
                           value = _.map(
-                            value, function (_value)
-                            {
-                              return _value;
-                            });
+                            value,
+                            function (_value) { return _value }
+                          );
+
                           value.pop();
                         }
 
@@ -362,7 +358,5 @@ define(
             return Store;
           };
         }
-      ]
-    );
-  }
-);
+      ]);
+  });

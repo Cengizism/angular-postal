@@ -20,8 +20,7 @@ require.config(
     shim: {
       angular: { deps: ['jquery'], exports: 'angular' },
       bootstrap: { deps: ['jquery'], exports: 'bootstrap' },
-      lawnchair: { deps: [], exports: 'lawnchair' },
-      dom: { deps: ['lawnchair'], exports: 'dom' }
+      dom: { deps: ['lawnchair'] }
     }
   }
 );
@@ -120,6 +119,16 @@ require(
                         diagnostics: DiagnosticsWireTap
                       };
                     },
+                    enumerable: false
+                  }
+                );
+
+
+                Object.defineProperty(
+                  $delegate.constructor.prototype,
+                  '$store',
+                  {
+                    get: Lawnchair,
                     enumerable: false
                   }
                 );
