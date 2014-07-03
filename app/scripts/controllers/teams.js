@@ -7,60 +7,54 @@ define(
     controllers.controller(
       'teams',
       [
-        '$scope', 'Broker',
-        function ($scope, Broker)
+        '$scope', '$timeout',
+        function ($scope, $timeout)
         {
-
           $scope.team = {};
           $scope.teams = [];
 
           var teams = $scope.$bus.channel('teams');
 
-          teams.publish(
+          $scope.Team = {
+            list: function ()
             {
-              topic: 'team.list',
-              data: {
-                callback: function (list) { $scope.teams = list }
-              }
-            }
-          );
-
-          $scope.saveTeam = function (team)
-          {
-            teams.publish(
-              {
-                topic: 'team.save',
-                data: {
-                  player: team,
-                  callback: function (list) { $scope.teams = list }
+              teams.publish(
+                'team.list',
+                function (list) { $scope.teams = list }
+              );
+            },
+            save: function (team)
+            {
+              teams.publish(
+                {
+                  topic: 'team.save',
+                  data: {
+                    team: team,
+                    callback: (function () { this.list() }).bind(this)
+                  }
                 }
-              }
-            );
+              );
 
-            $scope.team = {};
+              $scope.team = {};
+            },
+            remove: function (id)
+            {
+              teams.publish(
+                {
+                  topic: 'team.remove',
+                  data: {
+                    id: id,
+                    callback: (function () { this.list() }).bind(this)
+                  }
+                }
+              );
+            },
+            edit: function (team) { $scope.team = angular.extend({}, team) }
           };
 
-          $scope.deleteTeam = function (id)
-          {
-            teams.publish(
-              {
-                topic: 'team.delete',
-                data: {
-                  id: id,
-                  callback: function (list) { $scope.teams = list }
-                }
-              }
-            );
-          };
-
-          $scope.editTeam = function (team) { $scope.team = angular.extend({}, team) };
+          $timeout(function () { $scope.Team.list() });
 
           $scope.clearForm = function () { $scope.team = {} };
-
-
-
-
-
 
         }
       ]

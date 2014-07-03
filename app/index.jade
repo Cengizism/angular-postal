@@ -15,7 +15,7 @@ block app-content
 					.row
 						.col-md-4
 							br
-							form(role='form', ng-submit='saveTeam(team)')
+							form(role='form', ng-submit='Team.save(team)')
 								.form-group
 									label(for='name') Name
 									input#name.form-control(type='text', placeholder='Enter name', ng-model='team.name')
@@ -30,16 +30,14 @@ block app-content
 									table.table.table-hover.ng-cloak
 										thead
 											tr
-												th ID
 												th Name
 										tbody
 											tr(ng-repeat='team in teams')
-												td {{player.id}}
-												td {{player.name}}
+												td {{team.name}}
 												td
 													.btn-group-sm
-														button.btn.btn-default.btn-sm(ng-click='editTeam(team)') edit
-														button.btn.btn-default.btn-sm(ng-click='deleteTeam(team.id)') delete
+														button.btn.btn-default.btn-sm(ng-click='Team.edit(team)') edit
+														button.btn.btn-default.btn-sm(ng-click='Team.remove(team.id)') delete
 
 
 
@@ -51,7 +49,7 @@ block app-content
 					.row
 						.col-md-4
 							br
-							form(role='form', ng-submit='savePlayer(player)')
+							form(role='form', ng-submit='Player.save(player)')
 								.form-group
 									label(for='name') Name
 									input#name.form-control(type='text', placeholder='Enter name', ng-model='player.name')
@@ -87,19 +85,19 @@ block app-content
 												td {{player.goals}}
 												td
 													.btn-group-sm
-														button.btn.btn-default.btn-sm(ng-click='editPlayer(player)') edit
-														button.btn.btn-default.btn-sm(ng-click='removePlayer(player.id)') delete
+														button.btn.btn-default.btn-sm(ng-click='Player.edit(player)') edit
+														button.btn.btn-default.btn-sm(ng-click='Player.remove(player.id)') delete
 
 
 
 
 
-				//.col-md-12
-				//	span: small {{promised}}
-				//	hr
-				//	button.btn.btn-mini.btn-default(ng-click='showSubscriptions()') Show subscriptions
-				//	button.btn.btn-mini.btn-default(ng-click='showWiretaps()') Show wiretaps
-				//	button.btn.btn-mini.btn-default(ng-click='unsubscribeSavers()') Unsubscribe Savers
+				.col-md-12
+					span: small {{promised}}
+					hr
+					button.btn.btn-mini.btn-default(ng-click='showSubscriptions()') Show subscriptions
+					// button.btn.btn-mini.btn-default(ng-click='showWiretaps()') Show wiretaps
+					// button.btn.btn-mini.btn-default(ng-click='unsubscribeSavers()') Unsubscribe Savers
 
 
 

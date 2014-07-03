@@ -39,13 +39,14 @@ require(
     'run',
     'config',
 
+    'services/broker',
+
     'modals/player',
+    'modals/team',
 
     'controllers/teams',
     'controllers/players',
 
-    'services/broker',
-    'services/_store',
     'services/store',
     'directives/logs',
     'services/diagnostics'
@@ -124,14 +125,14 @@ require(
                 );
 
 
-                Object.defineProperty(
-                  $delegate.constructor.prototype,
-                  '$store',
-                  {
-                    get: Lawnchair,
-                    enumerable: false
-                  }
-                );
+//                Object.defineProperty(
+//                  $delegate.constructor.prototype,
+//                  '$store',
+//                  {
+//                    get: Lawnchair,
+//                    enumerable: false
+//                  }
+//                );
 
                 return $delegate;
               }

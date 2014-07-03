@@ -7,12 +7,32 @@ define(
     services.service(
       'Broker',
       [
-        '$rootScope', 'Player', '$timeout',
-        function ($rootScope, Player, $timeout)
+        '$rootScope', 'Player', 'Team', '$timeout',
+        function ($rootScope, Player, Team, $timeout)
         {
 
           var callbacks = {
-            players: {
+            team: {
+
+              list: function (callback, envelope) { callback(Team.list(), envelope) },
+
+              save: {
+                action: function (data, envelope)
+                {
+                  Team.save(data.team);
+
+                  data.callback(envelope);
+                }
+              },
+
+              remove: function (data, envelope)
+              {
+                Team.remove(data);
+
+                data.callback(envelope)
+              }
+            },
+            player: {
 
               list: function (callback, envelope) { callback(Player.list(), envelope) },
 
@@ -45,22 +65,6 @@ define(
               }
             }
           };
-
-          var players = $rootScope.$bus.channel('players');
-
-          players.subscribe('player.list', callbacks.players.list);
-
-          var saved = players.subscribe('player.save', callbacks.players.save.action)
-            .before(callbacks.players.save.before)
-            .after(callbacks.players.save.after)
-            .catch(callbacks.players.save.error);
-
-          players.subscribe('player.remove', callbacks.players.remove);
-          players.subscribe('player.block.save', callbacks.players.block.save);
-          // players.subscribe('*.save', callbacks.players.all.save);
-          // players.subscribe('*.remove', callbacks.players.all.remove);
-
-
 
 
 
@@ -124,6 +128,42 @@ define(
           //              }
           //            }
           //          );
+
+
+
+          return {
+            initialize: function ()
+            {
+              $timeout(
+                function ()
+                {
+                  var teams = $rootScope.$bus.channel('teams');
+
+                  teams.subscribe('team.list', callbacks.team.list);
+
+                  teams.subscribe('team.save', callbacks.team.save.action);
+
+                  teams.subscribe('team.remove', callbacks.team.remove);
+
+
+
+                  var players = $rootScope.$bus.channel('players');
+
+                  players.subscribe('player.list', callbacks.player.list);
+
+                  players.subscribe('player.save', callbacks.player.save.action)
+                    .before(callbacks.player.save.before)
+                    .after(callbacks.player.save.after)
+                    .catch(callbacks.player.save.error);
+
+                  players.subscribe('player.remove', callbacks.player.remove);
+                  players.subscribe('player.block.save', callbacks.player.block.save);
+                  // players.subscribe('*.save', callbacks.player.all.save);
+                  // players.subscribe('*.remove', callbacks.player.all.remove);
+                }
+              )
+            }
+          };
 
         }
       ]

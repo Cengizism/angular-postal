@@ -7,8 +7,8 @@ define(
     controllers.controller(
       'players',
       [
-        '$scope',
-        function ($scope)
+        '$scope', '$timeout',
+        function ($scope, $timeout)
         {
           // console.log('wiretaps ->', $scope.$bus.wiretaps);
 
@@ -18,43 +18,44 @@ define(
 
           var players = $scope.$bus.channel('players');
 
-          players.publish('player.list', function (list) { $scope.players = list });
-
-          $scope.savePlayer = function (player)
-          {
-            players.publish(
-              {
-                topic: 'player.save',
-                data: {
-                  player: player,
-                  callback: function ()
-                  {
-                    players.publish('player.list', function (list) { $scope.players = list });
+          $scope.Player = {
+            list: function ()
+            {
+              players.publish(
+                'player.list',
+                function (list) { $scope.players = list }
+              );
+            },
+            save: function (player)
+            {
+              players.publish(
+                {
+                  topic: 'player.save',
+                  data: {
+                    player: player,
+                    callback: (function () { this.list() }).bind(this)
                   }
                 }
-              }
-            );
+              );
 
-            $scope.player = {};
-          };
-
-          $scope.removePlayer = function (id)
-          {
-            players.publish(
-              {
-                topic: 'player.remove',
-                data: {
-                  id: id,
-                  callback: function ()
-                  {
-                    players.publish('player.list', function (list) { $scope.players = list });
+              $scope.player = {};
+            },
+            remove: function (id)
+            {
+              players.publish(
+                {
+                  topic: 'player.remove',
+                  data: {
+                    id: id,
+                    callback: (function () { this.list() }).bind(this)
                   }
                 }
-              }
-            );
+              );
+            },
+            edit: function (player) { $scope.player = angular.extend({}, player) }
           };
 
-          $scope.editPlayer = function (player) { $scope.player = angular.extend({}, player) };
+          $timeout(function() { $scope.Player.list() });
 
           $scope.clearForm = function () { $scope.player = {} };
 
@@ -81,10 +82,6 @@ define(
           //
           //          // console.log('postal ->', $scope.$bus);
           //
-          //          $scope.showSubscriptions = function ()
-          //          {
-          //            console.log('subscriptions ->', $scope.$bus.subscriptions);
-          //          };
           //
           //          $scope.showWiretaps = function ()
           //          {
