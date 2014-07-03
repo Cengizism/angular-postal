@@ -53,7 +53,7 @@ block app-content
 								.form-group
 									label(for='team') Team
 									select.form-control(ng-model='player.team', ng-options='team.id as team.name for team in teams')
-										option(value='') Choose a team
+										option(value='') - No team -
 								.form-group
 									label(for='name') Name
 									input#name.form-control(type='text', placeholder='Enter name', ng-model='player.name')

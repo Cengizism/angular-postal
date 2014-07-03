@@ -21,7 +21,9 @@ define(
                 id,
                 {
                   id: id,
-                  name: (_.isUndefined(team.name)) ? '' : team.name
+                  name: (_.isUndefined(team.name)) ?
+                        '- No name - ' + id :
+                        team.name
                 }
               );
             },

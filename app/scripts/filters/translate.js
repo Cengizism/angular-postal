@@ -1,6 +1,6 @@
 define(
-  ['filters/filters', 'config'],
-  function (filters, config)
+  ['filters/filters'],
+  function (filters)
   {
     'use strict';
 
@@ -11,10 +11,12 @@ define(
         {
           return function (teams, id)
           {
-            return (_.find(
-              teams,
-              function (team) { return team.id == id }
-            )).name;
+            return (!_.isUndefined(id)) ?
+                   (_.find(
+                     teams,
+                     function (team) { return team.id == id }
+                   )).name :
+                   '- No team -';
           }
         }
       ]
