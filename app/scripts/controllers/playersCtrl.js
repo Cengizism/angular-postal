@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'players',
+      'playersCtrl',
       [
         '$scope', '$timeout',
         function ($scope, $timeout)
@@ -17,6 +17,20 @@ define(
           $scope.players = [];
 
           var players = $scope.$bus.channel('players');
+
+          $scope.teams = [];
+
+          var teams = $scope.$bus.channel('teams');
+
+          $timeout(
+            function ()
+            {
+              teams.publish(
+                'team.list',
+                function (list) { $scope.teams = list }
+              );
+            }
+          );
 
           $scope.Player = {
             list: function ()
@@ -33,7 +47,7 @@ define(
                   topic: 'player.save',
                   data: {
                     player: player,
-                    callback: (function () { this.list() }).bind(this)
+                    callback: function () { this.list() }.bind(this)
                   }
                 }
               );
@@ -47,7 +61,7 @@ define(
                   topic: 'player.remove',
                   data: {
                     id: id,
-                    callback: (function () { this.list() }).bind(this)
+                    callback: function () { this.list() }.bind(this)
                   }
                 }
               );

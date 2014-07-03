@@ -5,7 +5,7 @@ define(
     'use strict';
 
     controllers.controller(
-      'teams',
+      'teamsCtrl',
       [
         '$scope', '$timeout',
         function ($scope, $timeout)
@@ -30,7 +30,7 @@ define(
                   topic: 'team.save',
                   data: {
                     team: team,
-                    callback: (function () { this.list() }).bind(this)
+                    callback: function () { this.list() }.bind(this)
                   }
                 }
               );
@@ -44,7 +44,7 @@ define(
                   topic: 'team.remove',
                   data: {
                     id: id,
-                    callback: (function () { this.list() }).bind(this)
+                    callback: function () { this.list() }.bind(this)
                   }
                 }
               );
