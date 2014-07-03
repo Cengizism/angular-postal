@@ -1,0 +1,1 @@
+define(["directives/directives"],function(e){e.directive("logs",[function(){return{restrict:"E",templateUrl:"./views/logs.html",scope:{data:"="},link:function(e,t,n){}}}])});

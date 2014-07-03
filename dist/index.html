@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>ngPostal</title>
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="styles/3684a881.main.css">
+    <link rel="stylesheet" href="styles/7998e4c1.main.css">
   </head>
   <body>
     <div id="wrap">
@@ -23,85 +23,162 @@
         </div>
       </div>
       <div class="container-fluid">
-        <div ng-controller="club" class="row-fluid">
-          <div class="col-md-2">
-            <h3>Player</h3>
-            <hr>
-            <form role="form" ng-submit="savePlayer(player)">
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input id="name" type="text" placeholder="Enter name" ng-model="player.name" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="position">Position</label>
-                <select ng-model="player.position" ng-options="position for position in positions" class="form-control">
-                  <option value="">Choose a position</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="goals">Goals</label>
+        <div class="row-fluid">
+          <div class="col-md-9">
+            <div class="row">
+              <div ng-controller="teamsCtrl" class="col-md-12">
+                <h3>Teams</h3>
+                <hr>
                 <div class="row">
-                  <div class="col-xs-6">
-                    <input id="goals" type="number" placeholder="Goals" min="0" max="120" ng-model="player.goals" class="form-control">
+                  <div class="col-md-4"><br>
+                    <form role="form" ng-submit="Team.save(team)">
+                      <div class="form-group">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" placeholder="Enter name" ng-model="team.name" class="form-control">
+                      </div>
+                      <button type="submit" class="btn btn-default">Save</button>
+                      <button type="reset" ng-show="team.name" ng-click="clearForm()" class="btn btn-link">Clear form</button>
+                    </form>
+                  </div>
+                  <div class="col-md-8"><br>
+                    <div class="panel">
+                      <div ng-hide="teams.length &gt; 0" class="panel-body">
+                        <p>There are no team. Please add some.</p>
+                      </div>
+                      <div ng-show="teams.length &gt; 0" class="panel-body">
+                        <table class="table table-hover ng-cloak">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="team in teams">
+                              <td>{{team.name}}</td>
+                              <td>
+                                <div class="btn-group-sm">
+                                  <button ng-click="Team.edit(team)" class="btn btn-default btn-sm">edit</button>
+                                  <button ng-click="Team.remove(team.id)" class="btn btn-default btn-sm">delete</button>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-              <button type="submit" class="btn btn-default">Save</button>
-              <button type="reset" ng-show="player.name" ng-click="clearForm()" class="btn btn-link">Clear form</button>
-            </form>
-          </div>
-          <div class="col-md-6">
-            <h3>Team</h3>
-            <hr>
-            <div class="panel">
-              <div ng-hide="players.length &gt; 0" class="panel-body">
-                <p>There are no players. Please add some.</p>
-              </div>
-              <div ng-show="players.length &gt; 0" class="panel-body">
-                <table class="table table-hover ng-cloak">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Position</th>
-                      <th>Goals</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat="player in players">
-                      <td>{{player.id}}</td>
-                      <td>{{player.name}}</td>
-                      <td>{{player.position}}</td>
-                      <td>{{player.goals}}</td>
-                      <td>
-                        <div class="btn-group-sm">
-                          <button ng-click="editPlayer(player)" class="btn btn-default btn-sm">edit</button>
-                          <button ng-click="deletePlayer(player.id)" class="btn btn-default btn-sm">delete</button>
+              <div ng-controller="playersCtrl" class="col-md-12">
+                <h3>Players</h3>
+                <hr>
+                <div class="row">
+                  <div class="col-md-4"><br>
+                    <form role="form" ng-submit="Player.save(player)">
+                      <div class="form-group">
+                        <label for="team">Team</label>
+                        <select ng-model="player.team" ng-options="team.id as team.name for team in teams" class="form-control">
+                          <option value="">- No team -</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" placeholder="Enter name" ng-model="player.name" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label for="position">Position</label>
+                        <select ng-model="player.position" ng-options="position for position in positions" class="form-control">
+                          <option value="">Choose a position</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="goals">Goals</label>
+                        <div class="row">
+                          <div class="col-xs-6">
+                            <input id="goals" type="number" placeholder="Goals" min="0" max="120" ng-model="player.goals" class="form-control">
+                          </div>
                         </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      </div>
+                      <button type="submit" class="btn btn-default">Save</button>
+                      <button type="reset" ng-show="player.name" ng-click="clearForm()" class="btn btn-link">Clear form</button>
+                    </form>
+                  </div>
+                  <div class="col-md-8"><br>
+                    <div class="panel">
+                      <div ng-hide="players.length &gt; 0" class="panel-body">
+                        <p>There are no players. Please add some.</p>
+                      </div>
+                      <div ng-show="players.length &gt; 0" class="panel-body">
+                        <table class="table table-hover ng-cloak">
+                          <thead>
+                            <tr>
+                              <th>Team</th>
+                              <th>Name</th>
+                              <th>Position</th>
+                              <th>Goals</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="player in players">
+                              <td>{{teams | translateTeamId : player.team}}</td>
+                              <td>{{player.name}}</td>
+                              <td>{{player.position}}</td>
+                              <td>{{player.goals}}</td>
+                              <td>
+                                <div class="btn-group-sm">
+                                  <button ng-click="Player.edit(player)" class="btn btn-default btn-sm">edit</button>
+                                  <button ng-click="Player.remove(player.id)" class="btn btn-default btn-sm">delete</button>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <hr><span><small>Promised: {{promised}}</small></span>
+                  </div>
+                </div>
               </div>
-            </div><span><small>{{promised}}</small></span>
+              <div class="col-md-12">
+                <hr>
+                <button ng-click="showSubscriptions()" class="btn btn-mini btn-default">Show subscriptions</button>
+                <button ng-click="unsubscribeSavers()" class="btn btn-mini btn-default">Unsubscribe Savers</button>
+              </div>
+            </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <h3>Events</h3>
             <hr>
-            <div class="list-group"><a href="#" ng-repeat="log in logs" ng-click="log.fold=!log.fold" class="list-group-item"><span ng-show="log.fold" class="glyphicon glyphicon-chevron-up pull-right"></span><span ng-hide="log.fold" class="glyphicon glyphicon-chevron-down pull-right"></span>
-                <h4 class="list-group-item-heading"><span class="label label-warning">{{log.channel}}</span>&nbsp;{{log.topic}}</h4>
-                <p class="list-group-item-text">{{log.timeStamp | date:'MM-dd-yyyy H:mm:ss'}}</p>
-                <div ng-show="log.fold">
-                  <hr>
-                  <dl class="dl-horizontal"><span ng-repeat="(key, value) in log.data">
-                      <dt>{{key}}</dt>
-                      <dd>{{value | json}}</dd></span></dl>
-                </div></a></div>
+            <!--.btn-group(data-toggle='buttons')-->
+            <!--	label.btn.btn-default.active-->
+            <!--		input(type='checkbox', checked='', ng-model='logs.actions.self.active')-->
+            <!--		| Log actions-->
+            <!--	label.btn.btn-default.active-->
+            <!--		input(type='checkbox', checked='')-->
+            <!--		| Log system events-->
+            <!--br-->
+            <!--br-->
+            <ul role="tablist" class="nav nav-tabs">
+              <li class="active"><a href="#actions" role="tab" data-toggle="tab">Actions &nbsp;<span class="label label-default">{{logs.actions.list.length}}</span></a></li>
+              <li><a href="#system" role="tab" data-toggle="tab">System &nbsp;<span class="label label-default">{{logs.system.list.length}}</span></a></li>
+            </ul>
+            <div class="tab-content">
+              <div id="actions" class="tab-pane fade active in">
+                <logs data="logs.actions.list"></logs>
+              </div>
+              <div id="system" class="tab-pane fade">
+                <logs data="logs.system.list"></logs>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <script data-main="scripts/e11ecb5f.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/a4d8a64a.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>
