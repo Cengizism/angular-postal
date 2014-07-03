@@ -21,6 +21,7 @@ define(
                 id,
                 {
                   id: id,
+                  team: (_.isUndefined(player.team)) ? null : player.team,
                   name: (_.isUndefined(player.name)) ? '' : player.name,
                   position: (_.isUndefined(player.position)) ? '' : player.position,
                   goals: (_.isUndefined(player.goals)) ? 0 : player.goals

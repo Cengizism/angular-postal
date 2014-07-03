@@ -9,7 +9,7 @@ block app-content
 
 
 
-				.col-md-12(ng-controller='teams')
+				.col-md-12(ng-controller='teamsCtrl')
 					h3 Teams
 					hr
 					.row
@@ -43,13 +43,17 @@ block app-content
 
 
 
-				.col-md-12(ng-controller='players')
+				.col-md-12(ng-controller='playersCtrl')
 					h3 Players
 					hr
 					.row
 						.col-md-4
 							br
 							form(role='form', ng-submit='Player.save(player)')
+								.form-group
+									label(for='team') Team
+									select.form-control(ng-model='player.team', ng-options='team.id as team.name for team in teams')
+										option(value='') Choose a team
 								.form-group
 									label(for='name') Name
 									input#name.form-control(type='text', placeholder='Enter name', ng-model='player.name')
@@ -73,6 +77,7 @@ block app-content
 									table.table.table-hover.ng-cloak
 										thead
 											tr
+												th Team
 												th Name
 												th Position
 												th Goals
@@ -80,6 +85,7 @@ block app-content
 
 										tbody
 											tr(ng-repeat='player in players')
+												td {{teams | translateTeamId : player.team}}
 												td {{player.name}}
 												td {{player.position}}
 												td {{player.goals}}

@@ -36,6 +36,13 @@ define(
               );
 
               $scope.team = {};
+
+              $scope.$bus.publish(
+                {
+                  channel: 'players',
+                  topic: 'player.team.list'
+                }
+              )
             },
             remove: function (id)
             {

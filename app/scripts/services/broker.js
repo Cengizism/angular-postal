@@ -103,21 +103,21 @@ define(
           //            }
           //          );
 
-          //          /**
-          //           * Linking channels
-          //           */
-          //          var testing = $rootScope.$bus.channel('testing');
-          //
-          //          $rootScope.$bus.linkChannels(
-          //            {
-          //              channel: 'players',
-          //              topic: 'player.list'
-          //            },
-          //            {
-          //              channel: 'testing',
-          //              topic: 'tested.method'
-          //            }
-          //          );
+//                    /**
+//                     * Linking channels
+//                     */
+//                    var testing = $rootScope.$bus.channel('testing');
+//
+//                    $rootScope.$bus.linkChannels(
+//                      {
+//                        channel: 'players',
+//                        topic: 'player.list'
+//                      },
+//                      {
+//                        channel: 'testing',
+//                        topic: 'tested.method'
+//                      }
+//                    );
           //
           //          testing.subscribe(
           //            {
@@ -140,11 +140,10 @@ define(
                   var teams = $rootScope.$bus.channel('teams');
 
                   teams.subscribe('team.list', callbacks.team.list);
-
-                  teams.subscribe('team.save', callbacks.team.save.action);
-
-                  teams.subscribe('team.remove', callbacks.team.remove);
-
+                  teams.subscribe('team.save', callbacks.team.save.action)
+                    .after(callbacks.player.list);
+                  teams.subscribe('team.remove', callbacks.team.remove)
+                    .after(callbacks.player.list);
 
 
                   var players = $rootScope.$bus.channel('players');
@@ -157,9 +156,28 @@ define(
                     .catch(callbacks.player.save.error);
 
                   players.subscribe('player.remove', callbacks.player.remove);
-                  players.subscribe('player.block.save', callbacks.player.block.save);
+
+                  // players.subscribe('player.block.save', callbacks.player.block.save);
                   // players.subscribe('*.save', callbacks.player.all.save);
                   // players.subscribe('*.remove', callbacks.player.all.remove);
+
+
+
+//                  $rootScope.$bus.linkChannels(
+//                    {
+//                      channel: 'teams',
+//                      topic: 'team.save'
+//                    },
+//                    {
+//                      channel: 'players',
+//                      topic: 'player.list',
+//                      data: {
+//                        callback: callbacks.player.list
+//                      }
+//                    }
+//                  );
+
+
                 }
               )
             }

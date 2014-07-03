@@ -44,12 +44,13 @@ require(
     'modals/player',
     'modals/team',
 
-    'controllers/teams',
-    'controllers/players',
+    'controllers/teamsCtrl',
+    'controllers/playersCtrl',
 
     'services/store',
     'directives/logs',
-    'services/diagnostics'
+    'services/diagnostics',
+    'filters/translate'
   ],
   function (angular, app, domReady, postal, DiagnosticsWireTap)
   {
@@ -99,7 +100,7 @@ require(
                     get: function ()
                     {
                       return {
-                        subscribe: (function ()
+                        subscribe: function ()
                         {
                           var sub = postal.subscribe.apply(postal, arguments);
 
@@ -107,7 +108,7 @@ require(
                             '$destroy',
                             function () { sub.unsubscribe() }
                           );
-                        }).bind(this),
+                        }.bind(this),
                         channel: postal.channel,
                         publish: postal.publish,
                         subscriptions: postal.subscriptions,

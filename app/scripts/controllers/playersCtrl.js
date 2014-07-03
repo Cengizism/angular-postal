@@ -32,6 +32,17 @@ define(
             }
           );
 
+          players.subscribe(
+            'player.team.list',
+            function ()
+            {
+              teams.publish(
+                'team.list',
+                function (list) { $scope.teams = list }
+              );
+            }
+          );
+
           $scope.Player = {
             list: function ()
             {
