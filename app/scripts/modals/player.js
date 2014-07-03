@@ -7,10 +7,10 @@ define(
     services.factory(
       'Player',
       [
-        '$rootScope', 'Store',
-        function ($rootScope, Store)
+        '$rootScope', '$timeout', 'Store',
+        function ($rootScope, $timeout, Store)
         {
-          return {
+          var store = {
             list: function () { return _.toArray(Store('players').all()) },
 
             save: function (player)
@@ -36,6 +36,57 @@ define(
             },
 
             remove: function (player) { Store('players').remove(player.id) }
+          };
+
+          return {
+
+            list: function (callback, envelope) { callback(store.list(), envelope) },
+
+            save: {
+              self: function (data, envelope)
+              {
+                store.save(data.player);
+
+                data.callback(envelope);
+              },
+              before: function (next, data, envelope) { next(data, envelope) },
+              after: function () { console.log('after save action ->', arguments[1]) },
+              failed: function (err) { console.log('error here ->', err) }
+            },
+
+            remove: function (data, envelope)
+            {
+              store.remove(data);
+
+              data.callback(envelope)
+            },
+
+            promised: {
+              list: function (data, envelope)
+              {
+                $timeout(
+                  function () { envelope.reply({ list: store.list() }) },
+                  1
+                );
+              }
+            },
+
+            block: {
+              save: function ()
+              {
+                $rootScope.$bus.unsubscribe(
+                  {
+                    channel: 'players',
+                    topic: 'player.save'
+                  }
+                )
+              }
+            },
+
+            all: {
+              save: function (data, envelope) { console.log('player save action!', envelope) },
+              remove: function (data, envelope) { console.log('player delete action!', envelope) }
+            }
           };
 
         }

@@ -10,134 +10,168 @@ define(
         '$rootScope', '$q', '$timeout', 'Player', 'Team',
         function ($rootScope, $q, $timeout, Player, Team)
         {
-
           return {
 
-            initialize: function ()
+            initialize: function (setup)
             {
               $rootScope.$bus.configuration.DEFAULT_CHANNEL = '/';
               $rootScope.$bus.configuration.SYSTEM_CHANNEL = 'postal';
               $rootScope.$bus.configuration.promise.createDeferred = function () { return $q.defer() };
               $rootScope.$bus.configuration.promise.getPromise = function (deferred) { return deferred.promise };
 
-              /**
-               * Here comes the subscriptions
-               */
+              setup.hasOwnProperty('logs') && this.diagnostics(setup.logs);
+
+              // var modals = ['Team'];
+
               $timeout(
                 function ()
                 {
+
+
                   var teams = $rootScope.$bus.channel('teams');
 
-                  teams.subscribe(
-                    'team.list',
-                    function (callback, envelope) { callback(Team.list(), envelope) }
-                  );
+                  //                  teams.subscribe('team.list', Team.list);
+                  //                  teams.subscribe('team.save', Team.save);
+                  //                  teams.subscribe('team.remove', Team.remove);
 
-                  teams.subscribe(
-                    'team.save',
-                    function (data, envelope)
+                  _.each(
+                    Team,
+                    function (callback, action)
                     {
-                      Team.save(data.team);
-
-                      data.callback(envelope);
+                      teams.subscribe('team.' + action, callback);
                     }
                   );
 
-                  teams.subscribe(
-                    'team.remove',
-                    function (data, envelope)
-                    {
-                      Team.remove(data);
-
-                      data.callback(envelope)
-                    }
-                  );
+//                  console.log('toString ->', Player.keys());
 
                   var players = $rootScope.$bus.channel('players');
 
-                  players.subscribe(
-                    'player.list',
-                    function (callback, envelope) { callback(Player.list(), envelope) }
-                  );
-
-                  players.subscribe(
-                    'player.list.promised',
-                    function (data, envelope)
+                  _.each(
+                    Player,
+                    function (callback, action)
                     {
-                      $timeout(
-                        function () { envelope.reply({ list: Player.list() }) },
-                        1
-                      );
+                      if (action == 'promised')
+                      {
+                        _.each(
+                          callback,
+                          function (internCb, internName)
+                          {
+                            players.subscribe('player.promised.' + internName, internCb);
+                          }
+                        )
+
+                      }
+                      else if (action == 'block')
+                      {
+                        _.each(
+                          callback,
+                          function (internCb, internName)
+                          {
+                            players.subscribe('player.block.' + internName, internCb);
+                          }
+                        )
+                      }
+                      else if (action == 'all')
+                      {
+                        _.each(
+                          callback,
+                          function (internCb, internName)
+                          {
+                            players.subscribe('*.' + internName, internCb);
+                          }
+                        )
+                      }
+                      else
+                      {
+                        if (_.isFunction(callback))
+                        {
+                          if (callback.hasOwnProperty('self'))
+                          {
+                            players.subscribe('player.' + action, callback.self);
+                          }
+                          else
+                          {
+                            players.subscribe('player.' + action, callback);
+                          }
+                        }
+                        else
+                        {
+                          var registered = players.subscribe('player.' + action, callback.self);
+
+                          _.each(
+                            callback,
+                            function (internCb, internName)
+                            {
+                              switch (internName)
+                              {
+                                case 'before':
+                                  registered.before(internCb)
+                                  break;
+                                case 'after':
+                                  registered.after(internCb)
+                                  break;
+                                case 'failed':
+                                  registered.catch(internCb)
+                                  break;
+                              }
+                            }
+                          );
+
+
+                        }
+                      }
+
                     }
                   );
 
-                  var saved = players.subscribe(
-                    'player.save',
-                    function (data, envelope)
-                    {
-                      Player.save(data.player);
 
-                      data.callback(envelope);
-                    }
-                  ).before(function (next, data, envelope) { next(data, envelope) })
-                    .after(function () { /*console.log('after save action ->', arguments[1])*/ })
-                    .catch(function (err) { /*console.log('error here ->', err)*/ });
+                  // console.log('teams ->', $rootScope.$bus.subscriptions.teams);
+                  console.log('players ->', $rootScope.$bus.subscriptions.players);
 
-                  players.subscribe(
-                    'player.block.save',
-                    function () { $rootScope.$bus.unsubscribe(saved) }
-                  );
 
-                  players.subscribe(
-                    '*.save',
-                    function (data, envelope) { /*console.log('player save action!', envelope)*/ }
-                  );
-
-                  players.subscribe(
-                    'player.remove',
-                    function (data, envelope)
-                    {
-                      Player.remove(data);
-
-                      data.callback(envelope)
-                    }
-                  );
-
-                  players.subscribe(
-                    '*.remove',
-                    function (data, envelope) { /*console.log('player delete action!', envelope)*/ }
-                  );
+                  //                  players.subscribe('player.list', Player.list);
+                  //                  players.subscribe('player.list.promised', Player.listPromised);
+                  //
+                  //                  players.subscribe('player.save',Player.save)
+                  //                    .before(Player.saveBefore)
+                  //                    .after(Player.saveAfter)
+                  //                    .catch(Player.saveError);
+                  //
+                  //                  players.subscribe('player.block.save', Player.blockSave);
+                  //                  players.subscribe('*.save', Player.allSave);
+                  //                  players.subscribe('player.remove', Player.remove);
+                  //                  players.subscribe('*.remove', Player.allRemove);
 
 
                   /**
                    * ---------------------------------------------------------------------------------
                    */
 
-                  /**
-                   * Linking channels
-                   */
-                  var testing = $rootScope.$bus.channel('testing');
-
-                  $rootScope.$bus.linkChannels(
-                    {
-                      channel: 'players',
-                      topic: 'player.list'
-                    },
-                    {
-                      channel: 'testing',
-                      topic: 'tested.method'
-                    }
-                  );
-
-                  testing.subscribe(
-                    {
-                      topic: 'tested.method',
-                      callback: function (data, envelope)
-                      {
-                        // console.log('this is from testing ->', data, envelope);
-                      }
-                    }
-                  );
+                  //                  /**
+                  //                   * Linking channels
+                  //                   */
+                  //                  var testing = $rootScope.$bus.channel('testing');
+                  //
+                  //                  $rootScope.$bus.linkChannels(
+                  //                    {
+                  //                      channel: 'players',
+                  //                      topic: 'player.list'
+                  //                    },
+                  //                    {
+                  //                      channel: 'testing',
+                  //                      topic: 'tested.method'
+                  //                    }
+                  //                  );
+                  //
+                  //                  testing.subscribe(
+                  //                    {
+                  //                      topic: 'tested.method',
+                  //                      callback: function (data, envelope)
+                  //                      {
+                  //                        // console.log('this is from testing ->', data, envelope);
+                  //                      }
+                  //                    }
+                  //                  );
 
 
                 }

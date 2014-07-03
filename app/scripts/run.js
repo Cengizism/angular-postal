@@ -9,28 +9,28 @@ define(
         '$rootScope', '$q', 'Broker',
         function($rootScope, $q, Broker)
         {
-          Broker.initialize();
-
-          Broker.diagnostics(
+          Broker.initialize(
             {
-              system: [{ channel: 'postal' }],
-              actions: [
-                { channel: 'teams' },
-                { channel: 'players' }
-              ]
+              logs: {
+                system: [{ channel: 'postal' }],
+                actions: [
+                  { channel: 'teams' },
+                  { channel: 'players' }
+                ]
+              }
             }
           );
-
-          $rootScope.showSubscriptions = function ()
-          {
-            console.log('subscriptions ->', $rootScope.$bus.subscriptions);
-          };
-
 
 
           /**
            * ---------------------------------------------------------------------------------
            */
+          $rootScope.showSubscriptions = function ()
+          {
+            console.log('teams ->', $rootScope.$bus.subscriptions.teams);
+            console.log('players ->', $rootScope.$bus.subscriptions.players);
+          };
+
           $rootScope.unsubscribeSavers = function ()
           {
             $rootScope.$bus.publish(

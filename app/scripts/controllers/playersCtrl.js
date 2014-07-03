@@ -55,7 +55,7 @@ define(
 
               players.request(
                 {
-                  topic: 'player.list.promised',
+                  topic: 'player.promised.list',
                   timeout: 2
                 }
               ).then(

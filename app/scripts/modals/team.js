@@ -10,7 +10,7 @@ define(
         '$rootScope', 'Store',
         function ($rootScope, Store)
         {
-          return {
+          var store = {
             list: function () { return _.toArray(Store('teams').all()) },
 
             save: function (team)
@@ -29,6 +29,22 @@ define(
             },
 
             remove: function (team) { Store('teams').remove(team.id) }
+          };
+
+          return {
+            list: function (callback, envelope) { callback(store.list(), envelope) },
+            save: function (data, envelope)
+            {
+              store.save(data.team);
+
+              data.callback(envelope);
+            },
+            remove: function (data, envelope)
+            {
+              store.remove(data);
+
+              data.callback(envelope)
+            }
           };
 
         }
