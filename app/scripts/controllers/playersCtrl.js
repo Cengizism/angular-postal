@@ -13,13 +13,13 @@ define(
           // console.log('wiretaps ->', $scope.$bus.wiretaps);
 
           $scope.positions = config.app.positions;
+
           $scope.player = {};
+
           $scope.players = [];
-
-          var players = $scope.$bus.channel('players');
-
           $scope.teams = [];
 
+          var players = $scope.$bus.channel('players');
           var teams = $scope.$bus.channel('teams');
 
           $timeout(
@@ -46,10 +46,31 @@ define(
           $scope.Player = {
             list: function ()
             {
-              players.publish(
-                'player.list',
-                function (list) { $scope.players = list }
+//              players.publish(
+//                'player.list',
+//                function (list) { $scope.players = list }
+//              );
+
+              $scope.promised = 'Loading promised..';
+
+              players.request(
+                {
+                  topic: 'player.list.promised',
+                  timeout: 2
+                }
+              ).then(
+                function (data)
+                {
+                  $scope.players = data.list;
+
+                  $scope.promised = 'data loaded';
+                },
+                function (err)
+                {
+                  $scope.promised = 'Uh oh! Error: ' + err;
+                }
               );
+
             },
             save: function (player)
             {
@@ -80,53 +101,12 @@ define(
             edit: function (player) { $scope.player = angular.extend({}, player) }
           };
 
-          $timeout(function() { $scope.Player.list() });
+          $timeout(function () { $scope.Player.list() });
 
           $scope.clearForm = function () { $scope.player = {} };
-
-
-          //          // FOr testing promised pub/sub only for the moment
-          //          $scope.promised = 'Loading promised..';
-          //
-          //          players.request(
-          //            {
-          //              topic: "last.login",
-          //              data: { userId: 8675309 },
-          //              timeout: 5000
-          //            }
-          //          ).then(
-          //            function (data)
-          //            {
-          //              $scope.promised = 'Last login for userId: ' + data.userId + ' occurred on ' + data.time;
-          //            },
-          //            function (err)
-          //            {
-          //              $scope.promised = 'Uh oh! Error: ' + err;
-          //            }
-          //          );
-          //
-          //          // console.log('postal ->', $scope.$bus);
-          //
-          //
-          //          $scope.showWiretaps = function ()
-          //          {
-          //            console.log('wiretaps ->', $scope.$bus.wiretaps);
-          //          };
-          //
-          //          $scope.unsubscribeSavers = function ()
-          //          {
-          //            players.publish(
-          //              {
-          //                topic: 'player.block.save',
-          //                data: {
-          //                  callback: function (result) { console.log('result ->', result) }
-          //                }
-          //              }
-          //            );
-          //          };
-
 
         }
       ]
     );
-  });
+  }
+);

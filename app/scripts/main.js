@@ -67,12 +67,6 @@ require(
               '$delegate',
               function ($delegate)
               {
-                /**
-                 * Some configuration options
-                 * @type {string}
-                 */
-                postal.configuration.DEFAULT_CHANNEL = '/';
-                postal.configuration.SYSTEM_CHANNEL = 'postal';
 
 
                 /**
@@ -100,6 +94,8 @@ require(
                     get: function ()
                     {
                       return {
+                        configuration: postal.configuration,
+
                         subscribe: function ()
                         {
                           var sub = postal.subscribe.apply(postal, arguments);
@@ -109,14 +105,21 @@ require(
                             function () { sub.unsubscribe() }
                           );
                         }.bind(this),
+
                         channel: postal.channel,
                         publish: postal.publish,
                         subscriptions: postal.subscriptions,
                         unsubscribe: postal.unsubscribe,
+
                         linkChannels: postal.linkChannels,
-                        wiretaps: postal.wiretaps,
+
+                        // Not working!
+                        // wiretaps: postal.wiretaps,
+
                         // promised
+                        promise: {},
                         request: postal.request,
+
                         // diagnostics
                         diagnostics: DiagnosticsWireTap
                       };
@@ -124,16 +127,6 @@ require(
                     enumerable: false
                   }
                 );
-
-
-//                Object.defineProperty(
-//                  $delegate.constructor.prototype,
-//                  '$store',
-//                  {
-//                    get: Lawnchair,
-//                    enumerable: false
-//                  }
-//                );
 
                 return $delegate;
               }

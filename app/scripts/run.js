@@ -1,23 +1,17 @@
 define(
-  ['app','postal'],
+  ['app', 'postal'],
   function (app, postal)
   {
     'use strict';
 
     app.run(
       [
-        '$rootScope', '$q', 'Broker', 'Diagnostics',
-        function($rootScope, $q, Broker, Diagnostics)
+        '$rootScope', '$q', 'Broker',
+        function($rootScope, $q, Broker)
         {
           Broker.initialize();
 
-          if (!angular.isDefined(postal.configuration.promise)) { postal.configuration.promise = {} }
-
-          postal.configuration.promise.createDeferred = function () { return $q.defer() };
-
-          postal.configuration.promise.getPromise = function (deferred) { return deferred.promise };
-
-          Diagnostics.initialize(
+          Broker.diagnostics(
             {
               system: [{ channel: 'postal' }],
               actions: [
@@ -27,13 +21,25 @@ define(
             }
           );
 
-
           $rootScope.showSubscriptions = function ()
           {
             console.log('subscriptions ->', $rootScope.$bus.subscriptions);
           };
 
 
+
+          /**
+           * ---------------------------------------------------------------------------------
+           */
+          $rootScope.unsubscribeSavers = function ()
+          {
+            $rootScope.$bus.publish(
+              {
+                channel: 'players',
+                topic: 'player.block.save'
+              }
+            );
+          };
         }
       ]
     );

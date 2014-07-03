@@ -11,7 +11,7 @@ define(
         {
           return function (teams, id)
           {
-            return (!_.isUndefined(id)) ?
+            return (! _.isUndefined(id)) ?
                    (_.find(
                      teams,
                      function (team) { return team.id == id }

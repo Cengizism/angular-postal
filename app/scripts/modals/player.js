@@ -24,7 +24,7 @@ define(
                 goals: (_.isUndefined(player.goals)) ? 0 : player.goals
               };
 
-              if (player.hasOwnProperty('team') && !_.isNull(player.team))
+              if (player.hasOwnProperty('team') && ! _.isNull(player.team))
               {
                 _player.team = player.team;
               }
