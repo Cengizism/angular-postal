@@ -48,8 +48,9 @@ require(
     'controllers/playersCtrl',
 
     'services/store',
+
     'directives/logs',
-    'services/diagnostics',
+
     'filters/translate'
   ],
   function (angular, app, domReady, postal, DiagnosticsWireTap)

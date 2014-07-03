@@ -7,8 +7,8 @@ define(
     services.service(
       'Broker',
       [
-        '$rootScope', '$q', '$timeout', 'Diagnostics', 'Player', 'Team',
-        function ($rootScope, $q, $timeout, Diagnostics, Player, Team)
+        '$rootScope', '$q', '$timeout', 'Player', 'Team',
+        function ($rootScope, $q, $timeout, Player, Team)
         {
 
           return {
