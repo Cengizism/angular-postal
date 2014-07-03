@@ -1,0 +1,1 @@
+define(["filters/filters"],function(e){e.filter("translateTeamId",[function(){return function(e,t){return _.isUndefined(t)?"- No team -":_.find(e,function(e){return e.id==t}).name}}])});

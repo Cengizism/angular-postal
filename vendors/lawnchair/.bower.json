@@ -1,0 +1,15 @@
+{
+  "name": "lawnchair",
+  "homepage": "https://github.com/brianleroux/lawnchair",
+  "version": "0.6.4",
+  "_release": "0.6.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.6.4",
+    "commit": "f9d28360a923aa3c2d1e7a313721b34ebfd60d33"
+  },
+  "_source": "git://github.com/brianleroux/lawnchair.git",
+  "_target": "~0.6.4",
+  "_originalSource": "lawnchair",
+  "_direct": true
+}
