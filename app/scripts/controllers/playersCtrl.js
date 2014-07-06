@@ -26,18 +26,18 @@ define(
             function ()
             {
               teams.publish(
-                'team.list',
+                'teams.list',
                 function (list) { $scope.teams = list }
               );
             }
           );
 
           players.subscribe(
-            'player.team.list',
+            'players.team.list',
             function ()
             {
               teams.publish(
-                'team.list',
+                'teams.list',
                 function (list) { $scope.teams = list }
               );
             }
@@ -47,7 +47,7 @@ define(
             list: function ()
             {
 //              players.publish(
-//                'player.list',
+//                'players.list',
 //                function (list) { $scope.players = list }
 //              );
 
@@ -55,7 +55,7 @@ define(
 
               players.request(
                 {
-                  topic: 'player.promised.list',
+                  topic: 'players.promised.list',
                   timeout: 2
                 }
               ).then(
@@ -76,7 +76,7 @@ define(
             {
               players.publish(
                 {
-                  topic: 'player.save',
+                  topic: 'players.save',
                   data: {
                     player: player,
                     callback: function () { this.list() }.bind(this)
@@ -90,7 +90,7 @@ define(
             {
               players.publish(
                 {
-                  topic: 'player.remove',
+                  topic: 'players.remove',
                   data: {
                     id: id,
                     callback: function () { this.list() }.bind(this)

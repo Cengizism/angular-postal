@@ -6,11 +6,15 @@ define(
 
     app.run(
       [
-        '$rootScope', '$q', 'Broker',
-        function($rootScope, $q, Broker)
+        '$rootScope', '$q', 'Broker', 'Team', 'Player',
+        function($rootScope, $q, Broker, Team, Player)
         {
           Broker.initialize(
             {
+              modules: {
+                teams: Team,
+                players: Player
+              },
               logs: {
                 system: [{ channel: 'postal' }],
                 actions: [

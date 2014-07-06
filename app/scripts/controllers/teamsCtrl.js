@@ -19,7 +19,7 @@ define(
             list: function ()
             {
               teams.publish(
-                'team.list',
+                'teams.list',
                 function (list) { $scope.teams = list }
               );
             },
@@ -27,7 +27,7 @@ define(
             {
               teams.publish(
                 {
-                  topic: 'team.save',
+                  topic: 'teams.save',
                   data: {
                     team: team,
                     callback: function () { this.list() }.bind(this)
@@ -40,7 +40,7 @@ define(
               $scope.$bus.publish(
                 {
                   channel: 'players',
-                  topic: 'player.team.list'
+                  topic: 'players.team.list'
                 }
               )
             },
@@ -48,7 +48,7 @@ define(
             {
               teams.publish(
                 {
-                  topic: 'team.remove',
+                  topic: 'teams.remove',
                   data: {
                     id: id,
                     callback: function () { this.list() }.bind(this)

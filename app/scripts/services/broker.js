@@ -7,8 +7,8 @@ define(
     services.service(
       'Broker',
       [
-        '$rootScope', '$q', '$timeout', 'Player', 'Team',
-        function ($rootScope, $q, $timeout, Player, Team)
+        '$rootScope', '$q', '$timeout',
+        function ($rootScope, $q, $timeout)
         {
           return {
 
@@ -21,112 +21,222 @@ define(
 
               setup.hasOwnProperty('logs') && this.diagnostics(setup.logs);
 
-              // var modals = ['Team'];
-
               $timeout(
                 function ()
                 {
-
-
-                  var teams = $rootScope.$bus.channel('teams');
-
-                  //                  teams.subscribe('team.list', Team.list);
-                  //                  teams.subscribe('team.save', Team.save);
-                  //                  teams.subscribe('team.remove', Team.remove);
-
                   _.each(
-                    Team,
-                    function (callback, action)
+                    setup.modules,
+                    function (modal, id)
                     {
-                      teams.subscribe('team.' + action, callback);
-                    }
-                  );
+                      var channel = $rootScope.$bus.channel(id);
 
-//                  console.log('toString ->', Player.keys());
-
-                  var players = $rootScope.$bus.channel('players');
-
-                  _.each(
-                    Player,
-                    function (callback, action)
-                    {
-                      if (action == 'promised')
-                      {
-                        _.each(
-                          callback,
-                          function (internCb, internName)
-                          {
-                            players.subscribe('player.promised.' + internName, internCb);
-                          }
-                        )
-
-                      }
-                      else if (action == 'block')
-                      {
-                        _.each(
-                          callback,
-                          function (internCb, internName)
-                          {
-                            players.subscribe('player.block.' + internName, internCb);
-                          }
-                        )
-                      }
-                      else if (action == 'all')
-                      {
-                        _.each(
-                          callback,
-                          function (internCb, internName)
-                          {
-                            players.subscribe('*.' + internName, internCb);
-                          }
-                        )
-                      }
-                      else
-                      {
-                        if (_.isFunction(callback))
+                      _.each(
+                        modal,
+                        function (callback, action)
                         {
-                          if (callback.hasOwnProperty('self'))
+                          if (action == 'promised')
                           {
-                            players.subscribe('player.' + action, callback.self);
+                            _.each(
+                              callback,
+                              function (internCb, internName)
+                              {
+                                channel.subscribe(id + '.promised.' + internName, internCb);
+                              }
+                            )
+
+                          }
+                          else if (action == 'block')
+                          {
+                            _.each(
+                              callback,
+                              function (internCb, internName)
+                              {
+                                channel.subscribe(id + '.block.' + internName, internCb);
+                              }
+                            )
+                          }
+                          else if (action == 'all')
+                          {
+                            _.each(
+                              callback,
+                              function (internCb, internName)
+                              {
+                                channel.subscribe('*.' + internName, internCb);
+                              }
+                            )
                           }
                           else
                           {
-                            players.subscribe('player.' + action, callback);
-                          }
-                        }
-                        else
-                        {
-                          var registered = players.subscribe('player.' + action, callback.self);
-
-                          _.each(
-                            callback,
-                            function (internCb, internName)
+                            if (_.isFunction(callback))
                             {
-                              switch (internName)
+                              if (callback.hasOwnProperty('self'))
                               {
-                                case 'before':
-                                  registered.before(internCb)
-                                  break;
-                                case 'after':
-                                  registered.after(internCb)
-                                  break;
-                                case 'failed':
-                                  registered.catch(internCb)
-                                  break;
+                                channel.subscribe(id + '.' + action, callback.self);
+                              }
+                              else
+                              {
+                                channel.subscribe(id + '.' + action, callback);
                               }
                             }
-                          );
+                            else
+                            {
+                              var registered = channel.subscribe(id + '.' + action, callback.self);
 
+                              _.each(
+                                callback,
+                                function (internCb, internName)
+                                {
+                                  switch (internName)
+                                  {
+                                    case 'before':
+                                      registered.before(internCb);
+                                      break;
+                                    case 'after':
+                                      registered.after(internCb);
+                                      break;
+                                    case 'failed':
+                                      registered.catch(internCb);
+                                      break;
+                                  }
+                                }
+                              );
+
+
+                            }
+                          }
 
                         }
-                      }
-
+                      );
                     }
                   );
 
 
+
+
+
+
+//                  var teams = $rootScope.$bus.channel('teams');
+//
+//                  //                  teams.subscribe('team.list', Team.list);
+//                  //                  teams.subscribe('team.save', Team.save);
+//                  //                  teams.subscribe('team.remove', Team.remove);
+//
+//                  _.each(
+//                    Team,
+//                    function (callback, action)
+//                    {
+//                      teams.subscribe('teams.' + action, callback);
+//                    }
+//                  );
+
+
+
+
+
+
+
+//                  console.log('toString ->', Player.keys());
+
+
+
+
+
+
+
+
+//                  var players = $rootScope.$bus.channel('players');
+//
+//                  _.each(
+//                    Player,
+//                    function (callback, action)
+//                    {
+//                      if (action == 'promised')
+//                      {
+//                        _.each(
+//                          callback,
+//                          function (internCb, internName)
+//                          {
+//                            players.subscribe('players.promised.' + internName, internCb);
+//                          }
+//                        )
+//
+//                      }
+//                      else if (action == 'block')
+//                      {
+//                        _.each(
+//                          callback,
+//                          function (internCb, internName)
+//                          {
+//                            players.subscribe('players.block.' + internName, internCb);
+//                          }
+//                        )
+//                      }
+//                      else if (action == 'all')
+//                      {
+//                        _.each(
+//                          callback,
+//                          function (internCb, internName)
+//                          {
+//                            players.subscribe('*.' + internName, internCb);
+//                          }
+//                        )
+//                      }
+//                      else
+//                      {
+//                        if (_.isFunction(callback))
+//                        {
+//                          if (callback.hasOwnProperty('self'))
+//                          {
+//                            players.subscribe('players.' + action, callback.self);
+//                          }
+//                          else
+//                          {
+//                            players.subscribe('players.' + action, callback);
+//                          }
+//                        }
+//                        else
+//                        {
+//                          var registered = players.subscribe('players.' + action, callback.self);
+//
+//                          _.each(
+//                            callback,
+//                            function (internCb, internName)
+//                            {
+//                              switch (internName)
+//                              {
+//                                case 'before':
+//                                  registered.before(internCb);
+//                                  break;
+//                                case 'after':
+//                                  registered.after(internCb);
+//                                  break;
+//                                case 'failed':
+//                                  registered.catch(internCb);
+//                                  break;
+//                              }
+//                            }
+//                          );
+//
+//
+//                        }
+//                      }
+//
+//                    }
+//                  );
+
+
+
+
+
+
+
+
+
+
+
+
                   // console.log('teams ->', $rootScope.$bus.subscriptions.teams);
-                  console.log('players ->', $rootScope.$bus.subscriptions.players);
+                  // console.log('players ->', $rootScope.$bus.subscriptions.players);
 
 
                   //                  players.subscribe('player.list', Player.list);
