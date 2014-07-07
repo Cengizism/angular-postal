@@ -49,7 +49,12 @@ define(
 
                 data.callback(envelope);
               },
-              before: function (next, data, envelope) { next(data, envelope) },
+              before: function (next, data, envelope)
+              {
+                console.log('before save action ->', data);
+
+                next(data, envelope);
+              },
               after: function () { console.log('after save action ->', arguments[1]) },
               failed: function (err) { console.log('error here ->', err) }
             },
@@ -71,17 +76,17 @@ define(
               }
             },
 
-            block: {
-              save: function ()
-              {
-                $rootScope.$bus.unsubscribe(
-                  {
-                    channel: 'players',
-                    topic: 'player.save'
-                  }
-                )
-              }
-            },
+//            block: {
+//              save: function ()
+//              {
+//                $rootScope.$bus.unsubscribe(
+//                  {
+//                    channel: 'players',
+//                    topic: 'player.save'
+//                  }
+//                )
+//              }
+//            },
 
             all: {
               save: function (data, envelope) { console.log('player save action!', envelope) },

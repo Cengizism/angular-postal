@@ -108,6 +108,9 @@ require(
                         }.bind(this),
 
                         channel: postal.channel,
+
+                        // swap: {},
+
                         publish: postal.publish,
                         subscriptions: postal.subscriptions,
                         unsubscribe: postal.unsubscribe,

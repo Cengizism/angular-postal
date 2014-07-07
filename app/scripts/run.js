@@ -25,7 +25,6 @@ define(
             }
           );
 
-
           /**
            * ---------------------------------------------------------------------------------
            */
@@ -33,16 +32,17 @@ define(
           {
             console.log('teams ->', $rootScope.$bus.subscriptions.teams);
             console.log('players ->', $rootScope.$bus.subscriptions.players);
+            console.log('broker ->', $rootScope.broker);
           };
 
           $rootScope.unsubscribeSavers = function ()
           {
-            $rootScope.$bus.publish(
-              {
-                channel: 'players',
-                topic: 'player.block.save'
-              }
-            );
+            Broker.disable('players', 'players.save');
+          };
+
+          $rootScope.registerSubscriptions = function ()
+          {
+            Broker.enable('players', 'players.save');
           };
         }
       ]

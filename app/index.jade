@@ -27,6 +27,24 @@ block app-content
 								.panel-body(ng-hide='teams.length > 0')
 									p There are no team. Please add some.
 								.panel-body(ng-show='teams.length > 0')
+
+									div
+										form.form-inline(role='form')
+											.checkbox
+												label
+													strong Enable: &nbsp;
+											.checkbox
+												label
+													input(type='checkbox')
+													| &nbsp;Save
+											.checkbox
+												label &nbsp;|&nbsp;
+											.checkbox
+												label
+													input(type='checkbox')
+													| &nbsp;Delete
+									hr
+
 									table.table.table-hover.ng-cloak
 										thead
 											tr
@@ -74,6 +92,24 @@ block app-content
 								.panel-body(ng-hide='players.length > 0')
 									p There are no players. Please add some.
 								.panel-body(ng-show='players.length > 0')
+
+									div
+										form.form-inline(role='form')
+											.checkbox
+												label
+													strong Enable: &nbsp;
+											.checkbox
+												label
+													input(type='checkbox')
+													| &nbsp;Save
+											.checkbox
+												label &nbsp;|&nbsp;
+											.checkbox
+												label
+													input(type='checkbox')
+													| &nbsp;Delete
+									hr
+
 									table.table.table-hover.ng-cloak
 										thead
 											tr
@@ -106,7 +142,9 @@ block app-content
 				.col-md-12
 					hr
 					button.btn.btn-mini.btn-default(ng-click='showSubscriptions()') Show subscriptions
-					button.btn.btn-mini.btn-default(ng-click='unsubscribeSavers()') Unsubscribe Savers
+					span &nbsp;&nbsp;&nbsp;&nbsp;
+					button.btn.btn-mini.btn-default(ng-click='unsubscribeSavers()') Block player save
+					button.btn.btn-mini.btn-default(ng-click='registerSubscriptions()') Enable player save
 
 
 
@@ -131,13 +169,13 @@ block app-content
 				li.active
 					a(href='#actions', role='tab', data-toggle='tab')
 						| Actions &nbsp;
-						span.label.label-default {{logs.actions.list.length}}
+						span.label.label-default {{broker.logs.actions.list.length}}
 				li
 					a(href='#system', role='tab', data-toggle='tab')
 						| System &nbsp;
-						span.label.label-default {{logs.system.list.length}}
+						span.label.label-default {{broker.logs.system.list.length}}
 			div.tab-content
 				div#actions.tab-pane.fade.active.in
-					logs(data='logs.actions.list')
+					logs(data='broker.logs.actions.list')
 				div#system.tab-pane.fade
-					logs(data='logs.system.list')
+					logs(data='broker.logs.system.list')
