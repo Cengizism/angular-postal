@@ -35,8 +35,8 @@ define(
            */
           $rootScope.showSubscriptions = function ()
           {
-            console.log('teams ->', $rootScope.$bus.subscriptions.teams);
-            console.log('players ->', $rootScope.$bus.subscriptions.players);
+            console.log('teams ->', Broker.subscriptions.teams);
+            console.log('players ->', Broker.subscriptions.players);
             console.log('broker ->', $rootScope.broker);
           };
 

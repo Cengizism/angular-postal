@@ -118,6 +118,8 @@ define(
               );
             },
 
+            subscriptions: (function () { return postal.subscriptions })(),
+
             register: function (channel, event, callback)
             {
               $rootScope.broker.swap[channel][event] = $rootScope.broker.channels[channel].subscribe(event, callback);
