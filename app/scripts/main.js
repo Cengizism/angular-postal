@@ -14,8 +14,8 @@ require.config(
       lodash: '../vendors/lodash/dist/lodash.min',
       conduitjs: '../vendors/conduitjs/lib/conduit.min',
       postal: '../vendors/postal.js/lib/postal.min',
-      'postal-diagnostics': '../vendors/postal.diagnostics/lib/postal.diagnostics.min',
-      'postal-request-response': '../vendors/postal.request-response/lib/postal.request-response.min'
+      diagnostics: '../vendors/postal.diagnostics/lib/postal.diagnostics.min',
+      request: '../vendors/postal.request-response/lib/postal.request-response.min'
     },
     shim: {
       angular: { deps: ['jquery'], exports: 'angular' },
@@ -31,8 +31,8 @@ require(
     'app',
     'domReady',
     'postal',
-    'postal-diagnostics',
-    'postal-request-response',
+    'diagnostics',
+    'request',
     'bootstrap',
     'lawnchair',
     'dom',
@@ -53,7 +53,7 @@ require(
 
     'filters/translate'
   ],
-  function (angular, app, domReady, postal, DiagnosticsWireTap)
+  function (angular, app, domReady, postal)
   {
     'use strict';
 
@@ -68,26 +68,6 @@ require(
               '$delegate',
               function ($delegate)
               {
-
-
-                /**
-                 * Channel definition instance
-                 * @type {_postal.ChannelDefinition}
-                 */
-                //                var chn = new postal.ChannelDefinition();
-                //                console.log('chn ->', chn);
-
-
-                /**
-                 * Add a wiretap
-                 */
-                  //                var tap = postal.addWireTap(
-                  //                  function (data, envelope) { console.log('wired: ', JSON.stringify(envelope)) }
-                  //                );
-                  // Remove the tap
-                  // tap();
-
-
                 Object.defineProperty(
                   $delegate.constructor.prototype,
                   '$bus',
@@ -95,8 +75,6 @@ require(
                     get: function ()
                     {
                       return {
-                        configuration: postal.configuration,
-
                         subscribe: function ()
                         {
                           var sub = postal.subscribe.apply(postal, arguments);
@@ -106,24 +84,12 @@ require(
                             function () { sub.unsubscribe() }
                           );
                         }.bind(this),
-
                         channel: postal.channel,
-
                         publish: postal.publish,
-                        subscriptions: postal.subscriptions,
                         unsubscribe: postal.unsubscribe,
-
-                        linkChannels: postal.linkChannels,
-
-                        // Not working!
-                        // wiretaps: postal.wiretaps,
-
-                        // promised
+                        link: postal.linkChannels,
                         promise: {},
-                        request: postal.request,
-
-                        // diagnostics
-                        diagnostics: DiagnosticsWireTap
+                        request: postal.request
                       };
                     },
                     enumerable: false

@@ -105,6 +105,18 @@ define(
 
           $scope.clearForm = function () { $scope.player = {} };
 
+          /**
+           * Testing link channels
+           */
+          var testing = $scope.$bus.channel('testing');
+
+          testing.subscribe(
+            {
+              topic: 'tested.method',
+              callback: function (data, envelope) { /*console.log('this is from testing ->', data, envelope)*/ }
+            }
+          );
+
         }
       ]
     );

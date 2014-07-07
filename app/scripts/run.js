@@ -15,12 +15,18 @@ define(
                 teams: Team,
                 players: Player
               },
-              logs: {
-                actions: [
-                  { channel: 'teams' },
-                  { channel: 'players' }
-                ]
-              }
+              logs: ['teams', 'players']
+            }
+          );
+
+          Broker.link(
+            {
+              channel: 'players',
+              topic: 'players.promised.list'
+            },
+            {
+              channel: 'testing',
+              topic: 'tested.method'
             }
           );
 
@@ -42,6 +48,11 @@ define(
           $rootScope.registerSubscriptions = function ()
           {
             Broker.enable('players', 'players.save');
+          };
+
+          $rootScope.reset = function ()
+          {
+            Broker.reset();
           };
         }
       ]

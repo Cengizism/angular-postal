@@ -62,7 +62,6 @@ define(
           $timeout(function () { $scope.Team.list() });
 
           $scope.clearForm = function () { $scope.team = {} };
-
         }
       ]
     );

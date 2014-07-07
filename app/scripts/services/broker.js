@@ -1,6 +1,6 @@
 define(
-  ['services/services'],
-  function (services)
+  ['services/services', 'postal', 'diagnostics'],
+  function (services, postal, diagnostics)
   {
     'use strict';
 
@@ -13,10 +13,10 @@ define(
           return {
             initialize: function (setup)
             {
-              $rootScope.$bus.configuration.DEFAULT_CHANNEL = '/';
-              $rootScope.$bus.configuration.SYSTEM_CHANNEL = 'postal';
-              $rootScope.$bus.configuration.promise.createDeferred = function () { return $q.defer() };
-              $rootScope.$bus.configuration.promise.getPromise = function (deferred) { return deferred.promise };
+              postal.configuration.DEFAULT_CHANNEL = '/';
+              postal.configuration.SYSTEM_CHANNEL = 'postal';
+              postal.configuration.promise.createDeferred = function () { return $q.defer() };
+              postal.configuration.promise.getPromise = function (deferred) { return deferred.promise };
 
               $rootScope.broker = {
                 setup: setup,
@@ -24,122 +24,96 @@ define(
                 swap: {},
                 logs: {
                   system: [
-                    { channel: $rootScope.$bus.configuration.SYSTEM_CHANNEL }
-                  ]
+                    { channel: postal.configuration.SYSTEM_CHANNEL }
+                  ],
+                  actions: []
                 }
               };
 
-              setup.hasOwnProperty('logs') && this.diagnostics(angular.extend(setup.logs, $rootScope.broker.logs));
+              _.each(
+                setup.logs,
+                function (log) { $rootScope.broker.logs.actions.push({ channel: log }) }
+              );
+
+              setup.hasOwnProperty('logs') && this.diagnostics($rootScope.broker.logs);
 
               $timeout(
                 function ()
                 {
                   _.each(
                     setup.modules,
-                    function (modal, id)
+                    function (modal, channel)
                     {
-                      $rootScope.broker.channels[id] = $rootScope.$bus.channel(id);
+                      $rootScope.broker.channels[channel] = $rootScope.$bus.channel(channel);
 
-                      $rootScope.broker.swap[id] = {};
+                      $rootScope.broker.swap[channel] = {};
 
                       _.each(
                         modal,
                         function (callback, action)
                         {
+                          var key = Object.keys(callback)[0];
+
+                          var details = {
+                            event: '',
+                            callback: callback[key]
+                          };
+
                           switch (action)
                           {
                             case 'promised':
-                              _.each(
-                                callback,
-                                function (cb, key) { this.register(id, id + '.promised.' + key, cb) }.bind(this)
-                              );
+                              details.event = channel + '.promised.' + key;
                               break;
 
                             case 'all':
-                              _.each(
-                                callback,
-                                function (cb, key) { this.register(id, '*.' + key, cb) }.bind(this)
-                              );
+                              details.event = '*.' + key;
                               break;
 
                             default:
-                              if (_.isFunction(callback))
-                              {
-                                this.register(
-                                  id,
-                                  id + '.' + action,
-                                  (callback.hasOwnProperty('self')) ? callback.self : callback
-                                );
-                              }
-                              else
-                              {
-                                this.register(id, id + '.' + action, callback.self);
+                              details = {
+                                event: channel + '.' + action,
+                                callback: (_.isFunction(callback)) ?
+                                          ((callback.hasOwnProperty('self')) ? callback.self : callback) :
+                                          callback.self
+                              };
+                          }
 
-                                _.each(
-                                  callback,
-                                  function (internCb, internName)
-                                  {
-                                    var event = id + '.' + action;
+                          this.register(channel, details.event, details.callback);
 
-                                    switch (internName)
-                                    {
-                                      case 'before':
-                                        $rootScope.broker.swap[id][event].before(internCb);
-                                        break;
-                                      case 'after':
-                                        $rootScope.broker.swap[id][event].after(internCb);
-                                        break;
-                                      case 'failed':
-                                        $rootScope.broker.swap[id][event].catch(internCb);
-                                        break;
-                                    }
-                                  }
-                                );
+                          if (! _.isFunction(callback))
+                          {
+                            _.each(
+                              callback,
+                              function (callback, stack)
+                              {
+                                var subscription = $rootScope.broker.swap[channel][details.event];
+
+                                switch (stack)
+                                {
+                                  case 'before':
+                                    subscription.before(callback);
+                                    break;
+                                  case 'after':
+                                    subscription.after(callback);
+                                    break;
+                                  case 'failed':
+                                    subscription.catch(callback);
+                                    break;
+                                }
                               }
+                            );
                           }
                         }.bind(this)
                       );
                     }.bind(this)
                   );
-
-
-                  /**
-                   * ---------------------------------------------------------------------------------
-                   */
-
-                  //                  /**
-                  //                   * Linking channels
-                  //                   */
-                  //                  var testing = $rootScope.$bus.channel('testing');
-                  //
-                  //                  $rootScope.$bus.linkChannels(
-                  //                    {
-                  //                      channel: 'players',
-                  //                      topic: 'player.list'
-                  //                    },
-                  //                    {
-                  //                      channel: 'testing',
-                  //                      topic: 'tested.method'
-                  //                    }
-                  //                  );
-                  //
-                  //                  testing.subscribe(
-                  //                    {
-                  //                      topic: 'tested.method',
-                  //                      callback: function (data, envelope)
-                  //                      {
-                  //                        // console.log('this is from testing ->', data, envelope);
-                  //                      }
-                  //                    }
-                  //                  );
-
                 }.bind(this)
               );
             },
 
-            register: function (id, event, callback)
+            register: function (channel, event, callback)
             {
-              $rootScope.broker.swap[id][event] = $rootScope.broker.channels[id].subscribe(event, callback);
+              $rootScope.broker.swap[channel][event] = $rootScope.broker.channels[channel].subscribe(event, callback);
             },
 
             disable: function (channel, event)
@@ -154,6 +128,10 @@ define(
               $rootScope.$bus.subscriptions[channel][event].push(subscription);
             },
 
+            reset: function () { postal.reset() },
+
+            link: function (original, target) { $rootScope.$bus.link(original, target) },
+
             diagnostics: function (logs)
             {
               $rootScope.broker.logs = {};
@@ -167,7 +145,7 @@ define(
                     $rootScope.broker.logs[name] = {};
                   }
 
-                  $rootScope.broker.logs[name].self = new $rootScope.$bus.diagnostics(
+                  $rootScope.broker.logs[name].self = new diagnostics(
                     {
                       name: name,
                       filters: filters,
@@ -180,8 +158,8 @@ define(
 
                         var log = angular.fromJson(message);
 
-                        log.auth = !((log.channel != $rootScope.$bus.configuration.SYSTEM_CHANNEL &&
-                                     $rootScope.$bus.subscriptions[log.channel][log.topic].length == 0));
+                        log.auth = ! ((log.channel != postal.configuration.SYSTEM_CHANNEL &&
+                                       postal.subscriptions[log.channel][log.topic].length == 0));
 
                         $rootScope.broker.logs[name].list.unshift(
                           angular.extend(
@@ -194,6 +172,18 @@ define(
                   )
                 }
               );
+            },
+
+            tap: function ()
+            {
+              /**
+               * Add a wiretap
+               */
+              //                var tap = postal.addWireTap(
+              //                  function (data, envelope) { console.log('wired: ', JSON.stringify(envelope)) }
+              //                );
+              // Remove the tap
+              // tap();
             }
 
           };
