@@ -11,7 +11,9 @@ define(
         function ($rootScope, $q, $timeout)
         {
           return {
-            initialize: function (setup)
+            setup: {},
+
+            configure: function ()
             {
               postal.configuration.DEFAULT_CHANNEL = '/';
               postal.configuration.SYSTEM_CHANNEL = 'postal';
@@ -19,7 +21,7 @@ define(
               postal.configuration.promise.getPromise = function (deferred) { return deferred.promise };
 
               $rootScope.broker = {
-                setup: setup,
+                setup: this.setup,
                 channels: {},
                 swap: {},
                 logs: {
@@ -31,17 +33,20 @@ define(
               };
 
               _.each(
-                setup.logs,
+                this.setup.logs,
                 function (log) { $rootScope.broker.logs.actions.push({ channel: log }) }
               );
 
-              setup.hasOwnProperty('logs') && this.diagnostics($rootScope.broker.logs);
+              this.setup.hasOwnProperty('logs') && this.diagnostics($rootScope.broker.logs);
+            },
 
+            build: function ()
+            {
               $timeout(
                 function ()
                 {
                   _.each(
-                    setup.modules,
+                    this.setup.modules,
                     function (modal, channel)
                     {
                       $rootScope.broker.channels[channel] = $rootScope.$bus.channel(channel);
@@ -184,8 +189,16 @@ define(
               //                );
               // Remove the tap
               // tap();
-            }
+            },
 
+            initialize: function (setup)
+            {
+              this.setup = setup;
+
+              this.configure();
+
+              this.build();
+            }
           };
         }
       ]
