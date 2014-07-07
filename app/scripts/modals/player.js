@@ -71,22 +71,10 @@ define(
               {
                 $timeout(
                   function () { envelope.reply({ list: store.list() }) },
-                  1
+                  10
                 );
               }
             },
-
-//            block: {
-//              save: function ()
-//              {
-//                $rootScope.$bus.unsubscribe(
-//                  {
-//                    channel: 'players',
-//                    topic: 'player.save'
-//                  }
-//                )
-//              }
-//            },
 
             all: {
               save: function (data, envelope) { console.log('player save action!', envelope) },

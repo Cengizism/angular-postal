@@ -16,7 +16,6 @@ define(
                 players: Player
               },
               logs: {
-                system: [{ channel: 'postal' }],
                 actions: [
                   { channel: 'teams' },
                   { channel: 'players' }

@@ -13,19 +13,23 @@ define(
           return {
             initialize: function (setup)
             {
-              $rootScope.broker = {
-                setup: setup,
-                channels: {},
-                swap: {},
-                logs: {}
-              };
-
               $rootScope.$bus.configuration.DEFAULT_CHANNEL = '/';
               $rootScope.$bus.configuration.SYSTEM_CHANNEL = 'postal';
               $rootScope.$bus.configuration.promise.createDeferred = function () { return $q.defer() };
               $rootScope.$bus.configuration.promise.getPromise = function (deferred) { return deferred.promise };
 
-              setup.hasOwnProperty('logs') && this.diagnostics(setup.logs);
+              $rootScope.broker = {
+                setup: setup,
+                channels: {},
+                swap: {},
+                logs: {
+                  system: [
+                    { channel: $rootScope.$bus.configuration.SYSTEM_CHANNEL }
+                  ]
+                }
+              };
+
+              setup.hasOwnProperty('logs') && this.diagnostics(angular.extend(setup.logs, $rootScope.broker.logs));
 
               $timeout(
                 function ()
@@ -97,120 +101,6 @@ define(
                       );
                     }.bind(this)
                   );
-
-
-                  //                  var teams = $rootScope.$bus.channel('teams');
-                  //
-                  //                  //                  teams.subscribe('team.list', Team.list);
-                  //                  //                  teams.subscribe('team.save', Team.save);
-                  //                  //                  teams.subscribe('team.remove', Team.remove);
-                  //
-                  //                  _.each(
-                  //                    Team,
-                  //                    function (callback, action)
-                  //                    {
-                  //                      teams.subscribe('teams.' + action, callback);
-                  //                    }
-                  //                  );
-
-
-                  //                  var players = $rootScope.$bus.channel('players');
-                  //
-                  //                  _.each(
-                  //                    Player,
-                  //                    function (callback, action)
-                  //                    {
-                  //                      if (action == 'promised')
-                  //                      {
-                  //                        _.each(
-                  //                          callback,
-                  //                          function (internCb, internName)
-                  //                          {
-                  //                            players.subscribe('players.promised.' + internName, internCb);
-                  //                          }
-                  //                        )
-                  //
-                  //                      }
-                  //                      else if (action == 'block')
-                  //                      {
-                  //                        _.each(
-                  //                          callback,
-                  //                          function (internCb, internName)
-                  //                          {
-                  //                            players.subscribe('players.block.' + internName, internCb);
-                  //                          }
-                  //                        )
-                  //                      }
-                  //                      else if (action == 'all')
-                  //                      {
-                  //                        _.each(
-                  //                          callback,
-                  //                          function (internCb, internName)
-                  //                          {
-                  //                            players.subscribe('*.' + internName, internCb);
-                  //                          }
-                  //                        )
-                  //                      }
-                  //                      else
-                  //                      {
-                  //                        if (_.isFunction(callback))
-                  //                        {
-                  //                          if (callback.hasOwnProperty('self'))
-                  //                          {
-                  //                            players.subscribe('players.' + action, callback.self);
-                  //                          }
-                  //                          else
-                  //                          {
-                  //                            players.subscribe('players.' + action, callback);
-                  //                          }
-                  //                        }
-                  //                        else
-                  //                        {
-                  //                          var registered = players.subscribe('players.' + action, callback.self);
-                  //
-                  //                          _.each(
-                  //                            callback,
-                  //                            function (internCb, internName)
-                  //                            {
-                  //                              switch (internName)
-                  //                              {
-                  //                                case 'before':
-                  //                                  registered.before(internCb);
-                  //                                  break;
-                  //                                case 'after':
-                  //                                  registered.after(internCb);
-                  //                                  break;
-                  //                                case 'failed':
-                  //                                  registered.catch(internCb);
-                  //                                  break;
-                  //                              }
-                  //                            }
-                  //                          );
-                  //
-                  //
-                  //                        }
-                  //                      }
-                  //
-                  //                    }
-                  //                  );
-
-
-                  // console.log('teams ->', $rootScope.$bus.subscriptions.teams);
-                  // console.log('players ->', $rootScope.$bus.subscriptions.players);
-
-
-                  //                  players.subscribe('player.list', Player.list);
-                  //                  players.subscribe('player.list.promised', Player.listPromised);
-                  //
-                  //                  players.subscribe('player.save',Player.save)
-                  //                    .before(Player.saveBefore)
-                  //                    .after(Player.saveAfter)
-                  //                    .catch(Player.saveError);
-                  //
-                  //                  players.subscribe('player.block.save', Player.blockSave);
-                  //                  players.subscribe('*.save', Player.allSave);
-                  //                  players.subscribe('player.remove', Player.remove);
-                  //                  players.subscribe('*.remove', Player.allRemove);
 
 
                   /**
@@ -288,9 +178,14 @@ define(
                           $rootScope.broker.logs[name].list = [];
                         }
 
+                        var log = angular.fromJson(message);
+
+                        log.auth = !((log.channel != $rootScope.$bus.configuration.SYSTEM_CHANNEL &&
+                                     $rootScope.$bus.subscriptions[log.channel][log.topic].length == 0));
+
                         $rootScope.broker.logs[name].list.unshift(
                           angular.extend(
-                            angular.fromJson(message),
+                            log,
                             { fold: false }
                           )
                         );

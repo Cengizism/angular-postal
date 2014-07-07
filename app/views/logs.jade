@@ -5,6 +5,9 @@
 		span.glyphicon.glyphicon-chevron-down.pull-right(ng-hide='log.fold')
 
 		h4.list-group-item-heading
+			div(ng-hide='log.auth')
+				span.label.label-danger Not authorized!
+				br
 			span.label.label-warning {{log.channel}}
 			| &nbsp;{{log.topic}}
 
