@@ -11,10 +11,10 @@ define(
         function ($rootScope, $q, $timeout)
         {
           return {
-            setup: {},
-
-            configure: function ()
+            initialize: function (setup)
             {
+              this.setup = setup;
+
               postal.configuration.DEFAULT_CHANNEL = '/';
               postal.configuration.SYSTEM_CHANNEL = 'postal';
               postal.configuration.promise.createDeferred = function () { return $q.defer() };
@@ -38,6 +38,8 @@ define(
               );
 
               this.setup.hasOwnProperty('logs') && this.diagnostics($rootScope.broker.logs);
+
+              this.build();
             },
 
             build: function ()
@@ -189,15 +191,6 @@ define(
               //                );
               // Remove the tap
               // tap();
-            },
-
-            initialize: function (setup)
-            {
-              this.setup = setup;
-
-              this.configure();
-
-              this.build();
             }
           };
         }
