@@ -123,23 +123,22 @@ define(
             register: function (channel, event, callback)
             {
               $rootScope.broker.swap[channel][event] = $rootScope.broker.channels[channel].subscribe(event, callback);
+
+              $rootScope.broker.swap[channel][event].auth = true;
             },
 
-            disable: function (channel, event)
-            {
-              $rootScope.$bus.unsubscribe($rootScope.$bus.subscriptions[channel][event][0]);
-            },
+            disable: function (channel, event) { postal.unsubscribe(this.subscriptions[channel][event][0]) },
 
             enable: function (channel, event)
             {
               var subscription = $rootScope.broker.swap[channel][event];
 
-              $rootScope.$bus.subscriptions[channel][event].push(subscription);
+              this.subscriptions[channel][event].push(subscription);
             },
 
             reset: function () { postal.reset() },
 
-            link: function (original, target) { $rootScope.$bus.link(original, target) },
+            link: function (original, target) { postal.linkChannels(original, target) },
 
             diagnostics: function (logs)
             {

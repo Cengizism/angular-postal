@@ -130,11 +130,10 @@ block app-content
 														button.btn.btn-default.btn-sm(ng-click='Player.edit(player)') edit
 														button.btn.btn-default.btn-sm(ng-click='Player.remove(player.id)') delete
 
-					.row
-						.col-md-12
-							hr
-							span: small Promised: {{promised}}
-
+										tfoot
+											tr
+												td(colspan='5')
+													span.pull-right: small {{promised}}
 
 
 
@@ -146,7 +145,7 @@ block app-content
 					button.btn.btn-mini.btn-default(ng-click='unsubscribeSavers()') Block player save
 					button.btn.btn-mini.btn-default(ng-click='registerSubscriptions()') Enable player save
 					span &nbsp;&nbsp;&nbsp;&nbsp;
-					button.btn.btn-mini.btn-default(ng-click='reset()') Reset
+					button.btn.btn-mini.btn-danger(ng-click='nuke()') Nuke it from orbit!
 
 
 

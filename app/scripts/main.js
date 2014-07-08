@@ -1,3 +1,4 @@
+// Needed for making e2e test working.
 if (window.location.port == '8080') document.getElementsByTagName('html')[0].setAttribute('ng-app');
 
 require.config(
@@ -38,19 +39,13 @@ require(
     'dom',
     'run',
     'config',
-
     'services/broker',
-
     'modals/player',
     'modals/team',
-
     'controllers/teamsCtrl',
     'controllers/playersCtrl',
-
     'services/store',
-
     'directives/logs',
-
     'filters/translate'
   ],
   function (angular, app, domReady, postal)

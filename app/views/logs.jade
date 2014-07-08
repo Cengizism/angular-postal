@@ -9,7 +9,10 @@
 				span.label.label-danger Unauthorized!
 				br
 			span.label.label-warning {{log.channel}}
-			| &nbsp;{{log.topic}}
+			| &nbsp;
+			span.label.label-info {{log.data.topic}}
+			br
+			| {{log.topic}}
 
 		p.list-group-item-text {{log.timeStamp | date:'MM-dd-yyyy H:mm:ss'}}
 

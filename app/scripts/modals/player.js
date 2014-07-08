@@ -70,7 +70,15 @@ define(
               list: function (data, envelope)
               {
                 $timeout(
-                  function () { envelope.reply({ list: store.list() }) },
+                  function ()
+                  {
+                    envelope.reply(
+                      {
+                        list: store.list(),
+                        envelope: envelope
+                      }
+                    )
+                  },
                   10
                 );
               }

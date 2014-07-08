@@ -40,7 +40,7 @@ define(
               $scope.$bus.publish(
                 {
                   channel: 'players',
-                  topic: 'players.team.list'
+                  topic: 'players.team.refresh'
                 }
               )
             },

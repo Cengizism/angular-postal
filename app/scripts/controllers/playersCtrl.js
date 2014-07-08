@@ -33,7 +33,7 @@ define(
           );
 
           players.subscribe(
-            'players.team.list',
+            'players.team.refresh',
             function ()
             {
               teams.publish(
@@ -51,7 +51,7 @@ define(
 //                function (list) { $scope.players = list }
 //              );
 
-              $scope.promised = 'Loading promised..';
+              $scope.promised = 'Loading players list...';
 
               players.request(
                 {
@@ -63,7 +63,7 @@ define(
                 {
                   $scope.players = data.list;
 
-                  $scope.promised = 'data loaded';
+                  $scope.promised = 'Players list loaded @ ' + data.envelope.timeStamp;
                 },
                 function (err)
                 {

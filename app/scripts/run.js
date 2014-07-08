@@ -1,13 +1,13 @@
 define(
-  ['app', 'postal'],
-  function (app, postal)
+  ['app'],
+  function (app)
   {
     'use strict';
 
     app.run(
       [
         '$rootScope', '$q', 'Broker', 'Team', 'Player',
-        function($rootScope, $q, Broker, Team, Player)
+        function ($rootScope, $q, Broker, Team, Player)
         {
           Broker.initialize(
             {
@@ -50,10 +50,7 @@ define(
             Broker.enable('players', 'players.save');
           };
 
-          $rootScope.reset = function ()
-          {
-            Broker.reset();
-          };
+          $rootScope.nuke = function () { Broker.reset() };
         }
       ]
     );
