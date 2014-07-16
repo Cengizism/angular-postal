@@ -13,7 +13,8 @@ body {
 }
 
 #wrap > .container-fluid {
-  padding: 60px 15px 0;
+  padding: 60px 15px;
+  overflow: hidden;
 }
 
 .list-group {

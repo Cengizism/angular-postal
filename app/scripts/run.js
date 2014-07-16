@@ -30,6 +30,57 @@ define(
             }
           );
 
+          $rootScope.privilage = function (channel, event, state)
+          {
+            if (channel == '*')
+            {
+              switch (event)
+              {
+                case 'save':
+                  $rootScope.broker.auth.players['players.save'] = state;
+                  $rootScope.broker.auth.teams['teams.save'] = state;
+
+                  if (state)
+                  {
+                    Broker.enable('players', 'players.save');
+                    Broker.enable('teams', 'teams.save');
+                  }
+                  else
+                  {
+                    Broker.disable('players', 'players.save');
+                    Broker.disable('teams', 'teams.save');
+                  }
+                  break;
+                case 'remove':
+                  $rootScope.broker.auth.players['players.remove'] = state;
+                  $rootScope.broker.auth.teams['teams.remove'] = state;
+
+                  if (state)
+                  {
+                    Broker.enable('players', 'players.remove');
+                    Broker.enable('teams', 'teams.remove');
+                  }
+                  else
+                  {
+                    Broker.disable('players', 'players.remove');
+                    Broker.disable('teams', 'teams.remove');
+                  }
+                  break;
+              }
+            }
+            else
+            {
+              if (!$rootScope.broker.auth[channel][event])
+              {
+                Broker.disable(channel, event);
+              }
+              else
+              {
+                Broker.enable(channel, event);
+              }
+            }
+          };
+
           /**
            * ---------------------------------------------------------------------------------
            */

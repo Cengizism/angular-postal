@@ -11,9 +11,15 @@ define(
         function ($rootScope, $q, $timeout)
         {
           return {
+            setup: {},
+
             initialize: function (setup)
             {
+              // console.log('this init ->', this);
+
               this.setup = setup;
+
+              // console.log('after ->', this);
 
               postal.configuration.DEFAULT_CHANNEL = '/';
               postal.configuration.SYSTEM_CHANNEL = 'postal';
@@ -29,7 +35,9 @@ define(
                     { channel: postal.configuration.SYSTEM_CHANNEL }
                   ],
                   actions: []
-                }
+                },
+                auth: {},
+                privilage: this.privilage
               };
 
               _.each(
@@ -54,6 +62,8 @@ define(
                       $rootScope.broker.channels[channel] = $rootScope.$bus.channel(channel);
 
                       $rootScope.broker.swap[channel] = {};
+
+                      $rootScope.broker.auth[channel] = {};
 
                       _.each(
                         modal,
@@ -124,7 +134,7 @@ define(
             {
               $rootScope.broker.swap[channel][event] = $rootScope.broker.channels[channel].subscribe(event, callback);
 
-              $rootScope.broker.swap[channel][event].auth = true;
+              $rootScope.broker.auth[channel][event] = true;
             },
 
             disable: function (channel, event) { postal.unsubscribe(this.subscriptions[channel][event][0]) },
@@ -139,6 +149,8 @@ define(
             reset: function () { postal.reset() },
 
             link: function (original, target) { postal.linkChannels(original, target) },
+
+            privilage: function (auth, channel, event) { },
 
             diagnostics: function (logs)
             {

@@ -26,33 +26,41 @@ block app-content
 							.panel
 								.panel-body(ng-hide='teams.length > 0')
 									p There are no team. Please add some.
-								.panel-body(ng-show='teams.length > 0')
 
-									div
+								.panel-body(ng-show='teams.length > 0')
+									div.text-right
 										form.form-inline(role='form')
 											.checkbox
 												label
 													strong Enable: &nbsp;
 											.checkbox
 												label
-													input(type='checkbox')
+													input(type='checkbox',
+													ng-model='broker.auth.teams["teams.save"]',
+													ng-change='privilage( "teams", "teams.save" )')
 													| &nbsp;Save
 											.checkbox
 												label &nbsp;|&nbsp;
 											.checkbox
 												label
-													input(type='checkbox')
+													input(type='checkbox',
+													ng-model='broker.auth.teams["teams.remove"]',
+													ng-change='privilage( "teams", "teams.remove" )')
 													| &nbsp;Delete
 									hr
 
-									table.table.table-hover.ng-cloak
+									//p
+									//	small: pre {{broker.auth.teams| json}}
+
+									table.table.table-striped.ng-cloak
 										thead
 											tr
 												th Name
+												th
 										tbody
 											tr(ng-repeat='team in teams')
 												td {{team.name}}
-												td
+												td.text-right
 													.btn-group-sm
 														button.btn.btn-default.btn-sm(ng-click='Team.edit(team)') edit
 														button.btn.btn-default.btn-sm(ng-click='Team.remove(team.id)') delete
@@ -91,33 +99,40 @@ block app-content
 							.panel
 								.panel-body(ng-hide='players.length > 0')
 									p There are no players. Please add some.
-								.panel-body(ng-show='players.length > 0')
 
-									div
+								.panel-body(ng-show='players.length > 0')
+									div.text-right
 										form.form-inline(role='form')
 											.checkbox
 												label
 													strong Enable: &nbsp;
 											.checkbox
 												label
-													input(type='checkbox')
+													input(type='checkbox',
+													ng-model='broker.auth.players["players.save"]',
+													ng-change='privilage( "players", "players.save" )')
 													| &nbsp;Save
 											.checkbox
 												label &nbsp;|&nbsp;
 											.checkbox
 												label
-													input(type='checkbox')
+													input(type='checkbox',
+													ng-model='broker.auth.players["players.remove"]',
+													ng-change='privilage( "players", "players.remove" )')
 													| &nbsp;Delete
 									hr
 
-									table.table.table-hover.ng-cloak
+									//p
+									//	small: pre {{broker.auth.players | json}}
+
+									table.table.table-striped.ng-cloak
 										thead
 											tr
 												th Team
 												th Name
 												th Position
 												th Goals
-												th Actions
+												th
 
 										tbody
 											tr(ng-repeat='player in players')
@@ -125,7 +140,7 @@ block app-content
 												td {{player.name}}
 												td {{player.position}}
 												td {{player.goals}}
-												td
+												td.text-right
 													.btn-group-sm
 														button.btn.btn-default.btn-sm(ng-click='Player.edit(player)') edit
 														button.btn.btn-default.btn-sm(ng-click='Player.remove(player.id)') delete
@@ -133,7 +148,7 @@ block app-content
 										tfoot
 											tr
 												td(colspan='5')
-													span.pull-right: small {{promised}}
+													span.pull-right: small.text-muted {{promised}}
 
 
 
@@ -142,8 +157,11 @@ block app-content
 					hr
 					button.btn.btn-mini.btn-default(ng-click='showSubscriptions()') Show subscriptions
 					span &nbsp;&nbsp;&nbsp;&nbsp;
-					button.btn.btn-mini.btn-default(ng-click='unsubscribeSavers()') Block player save
-					button.btn.btn-mini.btn-default(ng-click='registerSubscriptions()') Enable player save
+					button.btn.btn-mini.btn-default(ng-click='privilage("*", "save", false)') Block all save
+					button.btn.btn-mini.btn-default(ng-click='privilage("*", "save", true)') Enable all save
+					span &nbsp;&nbsp;&nbsp;&nbsp;
+					button.btn.btn-mini.btn-default(ng-click='privilage("*", "remove", false)') Block all remove
+					button.btn.btn-mini.btn-default(ng-click='privilage("*", "remove", true)') Enable all remove
 					span &nbsp;&nbsp;&nbsp;&nbsp;
 					button.btn.btn-mini.btn-danger(ng-click='nuke()') Nuke it from orbit!
 
