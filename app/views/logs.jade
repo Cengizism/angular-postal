@@ -1,8 +1,9 @@
 .list-group
 	a.list-group-item(href='#', ng-repeat='log in data', ng-click='log.fold=!log.fold')
 
-		span.glyphicon.glyphicon-chevron-up.pull-right(ng-show='log.fold')
-		span.glyphicon.glyphicon-chevron-down.pull-right(ng-hide='log.fold')
+		div(ng-hide='log.empty')
+			span.glyphicon.glyphicon-chevron-up.pull-right(ng-show='log.fold')
+			span.glyphicon.glyphicon-chevron-down.pull-right(ng-hide='log.fold')
 
 		h4.list-group-item-heading
 			div(ng-hide='log.auth')
@@ -16,9 +17,10 @@
 
 		p.list-group-item-text {{log.timeStamp | date:'MM-dd-yyyy H:mm:ss'}}
 
-		div(ng-show='log.fold')
-			hr
-			dl
-				span(ng-repeat='(key, value) in log.data')
-					dt {{key}}
-					dd {{value | json}}
+		div(ng-hide='log.empty')
+			div(ng-show='log.fold')
+				hr
+				dl
+					span(ng-repeat='(key, value) in log.data')
+						dt {{key}}
+						dd {{value | json}}

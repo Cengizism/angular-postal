@@ -178,13 +178,15 @@ define(
 
                         var log = angular.fromJson(message);
 
-                        log.auth = ! ((log.channel != postal.configuration.SYSTEM_CHANNEL &&
-                                       postal.subscriptions[log.channel][log.topic].length == 0));
-
                         $rootScope.broker.logs[name].list.unshift(
                           angular.extend(
                             log,
-                            { fold: false }
+                            {
+                              fold: false,
+                              empty: _.isEmpty(log.data),
+                              auth: ! ((log.channel != postal.configuration.SYSTEM_CHANNEL &&
+                                        postal.subscriptions[log.channel][log.topic].length == 0))
+                            }
                           )
                         );
                       }
