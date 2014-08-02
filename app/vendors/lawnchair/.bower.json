@@ -10,6 +10,5 @@
   },
   "_source": "git://github.com/brianleroux/lawnchair.git",
   "_target": "~0.6.4",
-  "_originalSource": "lawnchair",
-  "_direct": true
+  "_originalSource": "lawnchair"
 }

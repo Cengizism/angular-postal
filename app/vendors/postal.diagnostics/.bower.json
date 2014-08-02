@@ -37,6 +37,5 @@
   },
   "_source": "git://github.com/postaljs/postal.diagnostics.git",
   "_target": "~0.7.3",
-  "_originalSource": "postal.diagnostics",
-  "_direct": true
+  "_originalSource": "postal.diagnostics"
 }

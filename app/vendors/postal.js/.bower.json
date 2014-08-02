@@ -45,6 +45,5 @@
   },
   "_source": "git://github.com/postaljs/postal.js.git",
   "_target": "~0.10.1",
-  "_originalSource": "postal.js",
-  "_direct": true
+  "_originalSource": "postal.js"
 }
