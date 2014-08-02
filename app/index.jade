@@ -174,15 +174,24 @@ block app-content
 			h3 Events
 			hr
 
-			//.btn-group(data-toggle='buttons')
-			//	label.btn.btn-default.active
-			//		input(type='checkbox', checked='', ng-model='logs.actions.self.active')
-			//		| Log actions
-			//	label.btn.btn-default.active
-			//		input(type='checkbox', checked='')
-			//		| Log system events
-			//br
-			//br
+			div.text-right
+				form.form-inline(role='form')
+					.checkbox
+						label
+							strong Log: &nbsp;
+					.checkbox
+						label
+							input(type='checkbox')
+							// TODO: Still working?
+							//logs.actions.self.active
+							| &nbsp;Actions
+					.checkbox
+						label &nbsp;|&nbsp;
+					.checkbox
+						label
+							input(type='checkbox')
+							| &nbsp;System
+			hr
 
 			ul.nav.nav-tabs(role='tablist')
 				li.active
