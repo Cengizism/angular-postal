@@ -9,6 +9,9 @@ define(
         '$rootScope', '$q', 'Broker', 'Team', 'Player',
         function ($rootScope, $q, Broker, Team, Player)
         {
+          // TODO: Bootstrap ap with sample data
+
+          // TODO: Maybe simplify module declarations?
           Broker.initialize(
             {
               modules: {
@@ -24,6 +27,7 @@ define(
               channel: 'players',
               topic: 'players.promised.list'
             },
+            // TODO: Remove testing later!
             {
               channel: 'testing',
               topic: 'tested.method'
@@ -84,6 +88,7 @@ define(
           /**
            * ---------------------------------------------------------------------------------
            */
+          // TODO: Better reporting cross matched with active ones!
           $rootScope.showSubscriptions = function ()
           {
             console.log('teams ->', Broker.subscriptions.teams);
@@ -102,6 +107,8 @@ define(
           };
 
           $rootScope.nuke = function () { Broker.reset() };
+
+          angular.element('#wrap').show();
         }
       ]
     );
