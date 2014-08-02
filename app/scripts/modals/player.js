@@ -49,14 +49,22 @@ define(
 
                 data.callback(envelope);
               },
-              before: function (next, data, envelope)
-              {
-                console.log('before save action ->', data);
-
-                next(data, envelope);
-              },
-              after: function () { console.log('after save action ->', arguments[1]) },
-              failed: function (err) { console.log('error here ->', err) }
+              // before: function (next, data, envelope) { next(data, envelope) },
+              // after: function () { console.log('after save action ->', arguments[1]) },
+              'catch': function (err) { console.log('error here ->', err) }
+              // ,
+              // defer: true,
+              // disposeAfter: 2,
+              // distinct: false,
+              // once: false,
+              // withConstraint: function () { return true },
+              // withConstraints: [
+              //   function () { return true },
+              //   function () { return true }
+              // ],
+              // withDebounce: 2000,
+              // withDelay: 2000,
+              // withThrottle: 2000
             },
 
             remove: function (data, envelope)
