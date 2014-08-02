@@ -12,10 +12,7 @@ define(
           return function (teams, id)
           {
             return (! _.isUndefined(id)) ?
-                   (_.find(
-                     teams,
-                     function (team) { return team.id == id }
-                   )).name :
+                   ( _.find(teams, function (team) { return team.id == id }) ).name :
                    '- No team -';
           }
         }
