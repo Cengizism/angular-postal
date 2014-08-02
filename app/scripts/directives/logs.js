@@ -4,6 +4,7 @@ define(
   {
     'use strict';
 
+    // TODO: Check whether any directive methods are needed
     directives.directive(
       'logs',
       [
