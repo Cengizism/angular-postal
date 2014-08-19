@@ -1,6 +1,6 @@
 {
   "name": "conduitjs",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Give any method a pipeline....",
   "homepage": "https://github.com/ifandelse/ConduitJS",
   "keywords": [
@@ -27,11 +27,11 @@
     "expect": "0.1.2",
     "mocha": "~1.17.0"
   },
-  "_release": "0.3.2",
+  "_release": "0.3.3",
   "_resolution": {
     "type": "version",
-    "tag": "v0.3.2",
-    "commit": "f3808ad910d469eb9c5ae5653bedadc66b54580f"
+    "tag": "v0.3.3",
+    "commit": "62f1f6105dcdfa4bbf622061b4cccb0de8d5906e"
   },
   "_source": "git://github.com/ifandelse/ConduitJS.git",
   "_target": "~0.3.2",

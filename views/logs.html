@@ -1,9 +1,14 @@
-<div class="list-group"><a href="#" ng-repeat="log in data" ng-click="log.fold=!log.fold" class="list-group-item"><span ng-show="log.fold" class="glyphicon glyphicon-chevron-up pull-right"></span><span ng-hide="log.fold" class="glyphicon glyphicon-chevron-down pull-right"></span>
-    <h4 class="list-group-item-heading"><span class="label label-warning">{{log.channel}}</span>&nbsp;{{log.topic}}</h4>
+<div class="list-group"><a href="#" ng-repeat="log in data" ng-click="log.fold=!log.fold" class="list-group-item">
+    <div ng-hide="log.empty"><span ng-show="log.fold" class="glyphicon glyphicon-chevron-up pull-right"></span><span ng-hide="log.fold" class="glyphicon glyphicon-chevron-down pull-right"></span></div>
+    <h4 class="list-group-item-heading">
+      <div ng-hide="log.auth"><span class="label label-danger">Unauthorized!</span><br></div><span class="label label-warning">{{log.channel}}</span>&nbsp;<span class="label label-info">{{log.data.topic}}</span><br>{{log.topic}}
+    </h4>
     <p class="list-group-item-text">{{log.timeStamp | date:'MM-dd-yyyy H:mm:ss'}}</p>
-    <div ng-show="log.fold">
-      <hr>
-      <dl><span ng-repeat="(key, value) in log.data">
-          <dt>{{key}}</dt>
-          <dd>{{value | json}}</dd></span></dl>
+    <div ng-hide="log.empty">
+      <div ng-show="log.fold">
+        <hr>
+        <dl><span ng-repeat="(key, value) in log.data">
+            <dt>{{key}}</dt>
+            <dd>{{value | json}}</dd></span></dl>
+      </div>
     </div></a></div>
