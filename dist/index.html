@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>ngPostal</title>
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="styles/7998e4c1.main.css">
+    <link rel="stylesheet" href="styles/1de08015.main.css">
   </head>
   <body>
     <div id="wrap">
@@ -46,16 +46,40 @@
                         <p>There are no team. Please add some.</p>
                       </div>
                       <div ng-show="teams.length &gt; 0" class="panel-body">
-                        <table class="table table-hover ng-cloak">
+                        <div class="text-right">
+                          <form role="form" class="form-inline">
+                            <div class="checkbox">
+                              <label><strong>Enable: &nbsp;</strong></label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="broker.auth.teams[&quot;teams.save&quot;]" ng-change="privilage( &quot;teams&quot;, &quot;teams.save&quot; )">&nbsp;Save
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>&nbsp;|&nbsp;</label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="broker.auth.teams[&quot;teams.remove&quot;]" ng-change="privilage( &quot;teams&quot;, &quot;teams.remove&quot; )">&nbsp;Delete
+                              </label>
+                            </div>
+                          </form>
+                        </div>
+                        <hr>
+                        <!--p-->
+                        <!--	small: pre {{broker.auth.teams| json}}-->
+                        <table class="table table-striped ng-cloak">
                           <thead>
                             <tr>
                               <th>Name</th>
+                              <th></th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr ng-repeat="team in teams">
                               <td>{{team.name}}</td>
-                              <td>
+                              <td class="text-right">
                                 <div class="btn-group-sm">
                                   <button ng-click="Team.edit(team)" class="btn btn-default btn-sm">edit</button>
                                   <button ng-click="Team.remove(team.id)" class="btn btn-default btn-sm">delete</button>
@@ -109,14 +133,37 @@
                         <p>There are no players. Please add some.</p>
                       </div>
                       <div ng-show="players.length &gt; 0" class="panel-body">
-                        <table class="table table-hover ng-cloak">
+                        <div class="text-right">
+                          <form role="form" class="form-inline">
+                            <div class="checkbox">
+                              <label><strong>Enable: &nbsp;</strong></label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="broker.auth.players[&quot;players.save&quot;]" ng-change="privilage( &quot;players&quot;, &quot;players.save&quot; )">&nbsp;Save
+                              </label>
+                            </div>
+                            <div class="checkbox">
+                              <label>&nbsp;|&nbsp;</label>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="broker.auth.players[&quot;players.remove&quot;]" ng-change="privilage( &quot;players&quot;, &quot;players.remove&quot; )">&nbsp;Delete
+                              </label>
+                            </div>
+                          </form>
+                        </div>
+                        <hr>
+                        <!--p-->
+                        <!--	small: pre {{broker.auth.players | json}}-->
+                        <table class="table table-striped ng-cloak">
                           <thead>
                             <tr>
                               <th>Team</th>
                               <th>Name</th>
                               <th>Position</th>
                               <th>Goals</th>
-                              <th>Actions</th>
+                              <th></th>
                             </tr>
                           </thead>
                           <tbody>
@@ -125,7 +172,7 @@
                               <td>{{player.name}}</td>
                               <td>{{player.position}}</td>
                               <td>{{player.goals}}</td>
-                              <td>
+                              <td class="text-right">
                                 <div class="btn-group-sm">
                                   <button ng-click="Player.edit(player)" class="btn btn-default btn-sm">edit</button>
                                   <button ng-click="Player.remove(player.id)" class="btn btn-default btn-sm">delete</button>
@@ -133,52 +180,70 @@
                               </td>
                             </tr>
                           </tbody>
+                          <tfoot>
+                            <tr>
+                              <td colspan="5"><span class="pull-right"><small class="text-muted">{{promised}}</small></span></td>
+                            </tr>
+                          </tfoot>
                         </table>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <hr><span><small>Promised: {{promised}}</small></span>
-                  </div>
-                </div>
               </div>
               <div class="col-md-12">
                 <hr>
-                <button ng-click="showSubscriptions()" class="btn btn-mini btn-default">Show subscriptions</button>
-                <button ng-click="unsubscribeSavers()" class="btn btn-mini btn-default">Unsubscribe Savers</button>
+                <button ng-click="showSubscriptions()" class="btn btn-mini btn-default">Show subscriptions</button><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <button ng-click="privilage(&quot;*&quot;, &quot;save&quot;, false)" class="btn btn-mini btn-default">Block all save</button>
+                <button ng-click="privilage(&quot;*&quot;, &quot;save&quot;, true)" class="btn btn-mini btn-default">Enable all save</button><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <button ng-click="privilage(&quot;*&quot;, &quot;remove&quot;, false)" class="btn btn-mini btn-default">Block all remove</button>
+                <button ng-click="privilage(&quot;*&quot;, &quot;remove&quot;, true)" class="btn btn-mini btn-default">Enable all remove</button><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <button ng-click="nuke()" class="btn btn-mini btn-danger">Nuke it from orbit!</button>
               </div>
             </div>
           </div>
           <div class="col-md-3">
             <h3>Events</h3>
             <hr>
-            <!--.btn-group(data-toggle='buttons')-->
-            <!--	label.btn.btn-default.active-->
-            <!--		input(type='checkbox', checked='', ng-model='logs.actions.self.active')-->
-            <!--		| Log actions-->
-            <!--	label.btn.btn-default.active-->
-            <!--		input(type='checkbox', checked='')-->
-            <!--		| Log system events-->
-            <!--br-->
-            <!--br-->
+            <div class="text-right">
+              <form role="form" class="form-inline">
+                <div class="checkbox">
+                  <label><strong>Enable: &nbsp;</strong></label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox">
+                    <!-- TODO: Still working?-->
+                    <!--logs.actions.self.active-->&nbsp;Actions
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>&nbsp;|&nbsp;</label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox">&nbsp;System
+                  </label>
+                </div>
+              </form>
+            </div>
+            <hr>
             <ul role="tablist" class="nav nav-tabs">
-              <li class="active"><a href="#actions" role="tab" data-toggle="tab">Actions &nbsp;<span class="label label-default">{{logs.actions.list.length}}</span></a></li>
-              <li><a href="#system" role="tab" data-toggle="tab">System &nbsp;<span class="label label-default">{{logs.system.list.length}}</span></a></li>
+              <li class="active"><a href="#actions" role="tab" data-toggle="tab">Actions &nbsp;<span class="label label-default">{{broker.logs.actions.list.length}}</span></a></li>
+              <li><a href="#system" role="tab" data-toggle="tab">System &nbsp;<span class="label label-default">{{broker.logs.system.list.length}}</span></a></li>
             </ul>
             <div class="tab-content">
               <div id="actions" class="tab-pane fade active in">
-                <logs data="logs.actions.list"></logs>
+                <logs data="broker.logs.actions.list"></logs>
               </div>
               <div id="system" class="tab-pane fade">
-                <logs data="logs.system.list"></logs>
+                <logs data="broker.logs.system.list"></logs>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <script data-main="scripts/a4d8a64a.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/1b74bf41.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>
