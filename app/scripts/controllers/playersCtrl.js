@@ -10,8 +10,6 @@ define(
         '$scope', '$timeout',
         function ($scope, $timeout)
         {
-          // console.log('wiretaps ->', $scope.$bus.wiretaps);
-
           $scope.positions = config.app.positions;
 
           $scope.player = {};

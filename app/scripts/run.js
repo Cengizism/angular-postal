@@ -1,13 +1,13 @@
 define(
-  ['app'],
-  function (app)
+  ['app', 'config'],
+  function (app, config)
   {
     'use strict';
 
     app.run(
       [
-        '$rootScope', '$q', 'Broker', 'Team', 'Player',
-        function ($rootScope, $q, Broker, Team, Player)
+        '$rootScope', '$q', 'Broker', 'Store', 'Team', 'Player',
+        function ($rootScope, $q, Broker, Store, Team, Player)
         {
           // TODO: Bootstrap ap with sample data
 
@@ -109,6 +109,67 @@ define(
           $rootScope.nuke = function () { Broker.reset() };
 
           angular.element('#wrap').show();
+
+          // Scaffold some data if they do not exist
+          var teams = [
+            { id: 1, name: 'Barcelona' },
+            { id: 2, name: 'Real Madrid' }
+          ];
+
+          var players = [
+            {
+              id: 1,
+              name: 'Di Maria',
+              position: 3,
+              goals: 5,
+              team: 2
+            },
+            {
+              id: 2,
+              name: 'Messi',
+              position: 2,
+              goals: 9,
+              team: 1
+            },
+            {
+              id: 3,
+              name: 'Ronaldo',
+              position: 3,
+              goals: 8,
+              team: 2
+            }
+          ];
+
+          _.each(
+            teams,
+            function (team)
+            {
+              Store('teams').save(
+                team.id,
+                {
+                  id: team.id,
+                  name: team.name
+                }
+              );
+            }
+          );
+
+          _.each(
+            players,
+            function (player)
+            {
+              Store('players').save(
+                player.id,
+                {
+                  id: player.id,
+                  name: player.name,
+                  position: config.app.positions[player.position],
+                  goals: player.goals,
+                  team: player.team
+                }
+              );
+            }
+          )
         }
       ]
     );

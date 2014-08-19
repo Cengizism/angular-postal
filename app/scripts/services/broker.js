@@ -300,18 +300,6 @@ define(
                   )
                 }
               );
-            },
-
-            tap: function ()
-            {
-              /**
-               * Add a wiretap
-               */
-              //                var tap = postal.addWireTap(
-              //                  function (data, envelope) { console.log('wired: ', JSON.stringify(envelope)) }
-              //                );
-              // Remove the tap
-              // tap();
             }
           };
         }
